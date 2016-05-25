@@ -1,0 +1,75 @@
+{{extend "site/layout.html"}}
+
+{{block body_class}}home{{end}}
+{{block skin}}{{end}}
+
+{{block header_main_menu}}
+    {{<< functions.navigation(settings.MENUS_CONFIG.menu, active='home')}}
+{{end}}
+
+{{block other_use}}{{use "ui_riot"}}{{end}}
+
+{{block content}}
+
+
+<link rel="stylesheet" type="text/css" href="{{=url_for_static('site/site.css')}}"></link>
+<script src="{{=url_for_static('site/site.tag')}}" type="riot/tag"></script>
+
+<div class="container-fluid">
+    <div class="row" id="header-unit">
+        <h1>Uliweb</h1>
+        <p class="sub-title">Unlimited Python WEB Framework</p>
+        <p class="text-center">
+            <a href="{{=settings.SITE.download_url}}" class="btn btn-lg btn-ghost">{{=settings.SITE.download_title}}</a>
+        </p>
+        <p class="text-center github-status">
+            <iframe src="http://ghbtns.com/github-btn.html?user=limodou&repo=uliweb&type=watch&count=true"
+allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=limodou&repo=uliweb&type=fork&count=true"
+allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
+        </p>
+    </div>
+</div>
+<div class="container" style="height:300px;padding-top:40px;">
+  <cards></cards>
+</div>
+{{end}}
+
+{{block footer}}
+  <footer class="main-footer">
+    <div class="container">
+      <div class="row">
+          {{block footer-top}}
+          <footer-cards></footer-cards>
+          {{end}}
+      </div>
+    </div>
+  </footer>
+  <div id="footer-bottom">
+      <div class="container">
+          <div class="row">
+              <div class="col-sm-12" id="copyright">
+                  {{block footer-bottom}}
+                  <ul>
+                      <li>{{<< settings.LAYOUT.COPYRIGHT or '&copy; 2014 Uliweb Admin'}}</li>
+                      <li>/</li>
+                      <li><a mailto="{{=settings.SITE.mailto}}">{{=settings.SITE.mailto}}</a></li>
+                  </ul>
+                  {{end}}
+              </div>
+          </div>
+      </div>
+  </div>
+
+<script>
+  riot.mount('cards', {cards:{{<< json_dumps(settings.SITE.cards)}}});
+  riot.mount('footer-cards', {cards:{{<< json_dumps(settings.SITE.footer_cards)}}});
+  riot.mount('custom-menu', {messages:[
+    {'class':'messages-menu', 'url':'#', 'icon':'envelope-o', 'type':'success', 'count':0}
+  ]});
+</script>
+{{end}}
+
+{{block header_custom_menu}}
+  {{include "site/custom_menu.html"}}
+{{end}}

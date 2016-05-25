@@ -1,0 +1,102 @@
+#header-unit {font-family:Bebas-Neue, serif; margin-top:-15px;height:400px;}
+#header-unit h1 {padding-top:60px;font-size:600%;text-align:center;font-family:"Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
+#header-unit .sub-title {text-align:center;font-size:200%;}
+#header-unit .github-status {margin-top:25px;}
+#header-unit {color:white;background-color:#164f7d;}
+.btn-ghost {
+  background-color: transparent;
+  color: white;
+  border-color: white;
+}
+.btn-ghost:hover {
+  color: black;
+  background-color: white;
+}
+.btn-ghost-light {
+  background-color: transparent;
+  color: black;
+  border-color: gray;
+}
+.btn-ghost-light:hover {
+  color: black;
+  background-color: #eee;
+}
+.nav>li>a.btn-menubar {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  top: 10px;
+  margin-right:10px;
+}
+body.home .content-wrapper > .container{
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+#header-unit {
+  /* 加载背景图 */
+  background-image: url(/static/site/blue-bg-ground.jpg);
+
+  /* 背景图垂直、水平均居中 */
+  background-position: center center;
+
+  /* 背景图不平铺 */
+  background-repeat: no-repeat;
+
+  /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
+  background-attachment: fixed;
+
+  /* 让背景图基于容器大小伸缩 */
+  background-size: cover;
+
+  /* 设置背景颜色，背景图加载过程中会显示背景色 */
+  background-color: #d2d6de;
+    color: white;
+}
+body.home .content-wrapper {
+  background-color:transparent;
+  border-left: 0px;
+}
+body.home .main-footer {
+  border-left: 0px;
+  border-top: 0px;
+  background-color: #2f3645;
+  padding-top: 10px;
+  margin-top: 15px;
+}
+body.home .main-footer li.heading {
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  color: #e7e8e8;
+  cursor: text;
+}
+body.home .main-footer li {
+  margin: 2px 0;
+}
+body.home .main-footer a:hover {
+  color: white;
+}
+body.home .main-footer a {
+  color: #a1a1a1;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: "Proxima N W15 Light",Helvetica,Arial,Sans-Serif;
+}
+body.home .navbar-nav li.active {background-color:#eee;}
+body.home .navbar-header a {color:#72afd2;}
+#footer-bottom ul > li {
+    float: left;
+    padding: 10px 10px;
+    cursor: auto;
+    color: #747474;
+}
+#footer-bottom li {
+    margin: 2px 0;
+}
+#footer-bottom {
+    background-color: #1e242f;
+    border-top: 1px solid #000;
+}
+body.home .main-footer ul, #footer-bottom ul {
+    list-style-type: none;
+    margin-left: 0;
+}
