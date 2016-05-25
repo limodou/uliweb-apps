@@ -39,20 +39,55 @@
 </footer-card>
 
 <custom-menu>
-<ul class="nav navbar-nav">
-  <li class="{ m.class }" each="m in messages">
-    <a href="{ m.url }">
-        <i class="fa fa-{ m.icon }"></i>
-        <span class="label label-{ m.type }" if={ m.count }>{ m.count }</span>
-    </a>
-  </li>
+    <style scoped>
+        .user-menu .dropdown-menu {
+        position: absolute;
+        right: 0;
+        left: auto;
+    }
+    </style>
+    <ul class="nav navbar-nav" if={ opts.messages }>
+      <li class="{ m.class }" each="{ m in opts.messages }">
+        <a href="{ m.url }">
+            <i class="fa fa-{ m.icon }"></i>
+            <span class="label label-{ m.type }" if={ m.count }>{ m.count }</span>
+        </a>
+      </li>
+      <!--<user-info user={ opts.user } if={ opts.user }></user-info>-->
+        <li class="dropdown user user-menu" if={ opts.user }>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="{ opts.user.image_url }" class="user-image" alt="User Image">
+                <span class="hidden-xs">{ opts.user.name }</span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header bg-light-blue">
+                    <img src="{ opts.user.image_url }" class="img-circle" alt="avatar"/>
+                    <p>
+                        <span>{ opts.user.name }</span>
+                        <small if={ opts.user.email }>{ opts.user.email }</small>
+                    </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                    <div class="pull-left">
+                        <a href="{ opts.user.url }" class="btn btn-default btn-flat">访问</a>
+                    </div>
+                    <div class="pull-right">
+                        <a href="/logout" class="btn btn-default btn-flat">注销</a>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav" if={ !opts.user }>
+      <li>
+        <a href="/login" class="btn-menubar">登录</a>
+      </li>
+      <li if={ opts.enable_register }>
+        <a href="/register" class="btn btn-default btn-ghost-light btn-menubar">注册</a>
+      </li>
+    </ul>
 
-<!-- User Account: style can be found in dropdown.less -->
-<li class="user user-menu">
-  <a href="{ opts.user_url }">
-    <img src="{ opts.user_image_url }" class="user-image" alt="User Image">
-    <span class="hidden-xs">{ opts.user_name }</span>
-  </a>
-</li>
-</ul>
 </custom-menu>
+

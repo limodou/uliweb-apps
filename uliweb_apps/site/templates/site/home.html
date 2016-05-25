@@ -62,14 +62,31 @@ allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></
   </div>
 
 <script>
+  {{
+    if hasattr(request, 'user') and request.user:
+      data = {
+        'messages':[
+          {'class':'messages-menu', 'url':'#', 'icon':'envelope-o', 'type':'success', 'count':4}
+        ],
+        'user': {
+          'image_url':request.user.get_image_url(),
+          'url':'#',
+          'name':unicode(request.user),
+          'email':request.user.email,
+        },
+        'enable_register':settings.SITE.enable_register,
+      }
+    else:
+      data = {}
+    pass
+  }}
+  var data = {{<< json_dumps(data)}};
   riot.mount('cards', {cards:{{<< json_dumps(settings.SITE.cards)}}});
   riot.mount('footer-cards', {cards:{{<< json_dumps(settings.SITE.footer_cards)}}});
-  riot.mount('custom-menu', {messages:[
-    {'class':'messages-menu', 'url':'#', 'icon':'envelope-o', 'type':'success', 'count':0}
-  ]});
+  riot.mount('custom-menu', data);
 </script>
 {{end}}
 
 {{block header_custom_menu}}
-  {{include "site/custom_menu.html"}}
+  <custom-menu></custom-menu>
 {{end}}
