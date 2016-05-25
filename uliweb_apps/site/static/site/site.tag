@@ -53,32 +53,8 @@
             <span class="label label-{ m.type }" if={ m.count }>{ m.count }</span>
         </a>
       </li>
-      <!--<user-info user={ opts.user } if={ opts.user }></user-info>-->
-        <li class="dropdown user user-menu" if={ opts.user }>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="{ opts.user.image_url }" class="user-image" alt="User Image">
-                <span class="hidden-xs">{ opts.user.name }</span>
-            </a>
-            <ul class="dropdown-menu">
-                <!-- User image -->
-                <li class="user-header bg-light-blue">
-                    <img src="{ opts.user.image_url }" class="img-circle" alt="avatar"/>
-                    <p>
-                        <span>{ opts.user.name }</span>
-                        <small if={ opts.user.email }>{ opts.user.email }</small>
-                    </p>
-                </li>
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                    <div class="pull-left">
-                        <a href="{ opts.user.url }" class="btn btn-default btn-flat">访问</a>
-                    </div>
-                    <div class="pull-right">
-                        <a href="/logout" class="btn btn-default btn-flat">注销</a>
-                    </div>
-                </li>
-            </ul>
-        </li>
+      <li class="dropdown user user-menu" if={ opts.user } data-is="user-info" user={ opts.user }></li>
+
     </ul>
     <ul class="nav navbar-nav" if={ !opts.user }>
       <li>
@@ -91,3 +67,28 @@
 
 </custom-menu>
 
+<user-info>
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <img src="{ opts.user.image_url }" class="user-image" alt="User Image">
+        <span class="hidden-xs">{ opts.user.name }</span>
+    </a>
+    <ul class="dropdown-menu">
+        <!-- User image -->
+        <li class="user-header bg-light-blue">
+            <img src="{ opts.user.image_url }" class="img-circle" alt="avatar"/>
+            <p>
+                <span>{ opts.user.name }</span>
+                <small if={ opts.user.email }>{ opts.user.email }</small>
+            </p>
+        </li>
+        <!-- Menu Footer-->
+        <li class="user-footer">
+            <div class="pull-left">
+                <a href="{ opts.user.url }" class="btn btn-default btn-flat">访问</a>
+            </div>
+            <div class="pull-right">
+                <a href="/logout" class="btn btn-default btn-flat">注销</a>
+            </div>
+        </li>
+    </ul>
+</user-info>
