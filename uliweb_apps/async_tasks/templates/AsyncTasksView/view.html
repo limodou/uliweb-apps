@@ -1,0 +1,100 @@
+{{extend "config_layout.html"}}
+
+{{block menu}}
+{{menu('config')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'log', 'async_tasks')}}
+{{end}}
+
+{{block content_main}}
+{{use "jquery", css_only=True}}
+
+<style>
+#workflow {
+  width: 100%;
+  height: 450px;
+  border: 1px solid lightgray;
+}
+</style>
+
+<script type="text/javascript">
+    $(function(){
+        $('body').on('click', 'div a#reset', function(e){
+            var self = $(this);
+            e.preventDefault();
+            var href = self.attr('href');
+            $.post(href).success(function(r){
+                if (r.success){
+                    window.location.reload();
+                    show_message(r.message);
+                } else {
+                    show_message(r.message, 'error');
+                }
+        })
+      })
+    });
+</script>
+
+
+<t:bs.breadcrumb>
+    <a href="{{=request.GET.get('back_url', '/async_tasks')}}" title="返回"></a>
+    <a active="active" title="Async Task - {{=task_id}}"></a>
+</t:bs.breadcrumb>
+
+<div class="content">
+    <div class="box col_12">
+        <h2>Async Task - {{=task_id}}</h2>
+        {{if object.children_count > 0:}}
+        <div id="workflow"></div>
+        {{pass}}
+        <div class="box-body">
+            {{<< view}}
+            <div style="padding:5px;">
+                <a class="btn btn-primary" href="{{=url_for('async_tasks.views.AsyncTasksView.edit', task_id=task_id)}}">
+                <i class="icon-edit icon-white"></i>
+                {{=_('Edit')}}</a>
+                {{if object.status == 'E' or object.status == 'F':}}
+                <a class="btn btn-green" id="reset" href="{{=url_for('async_tasks.views.AsyncTasksView.reset', task_id=task_id)}}">
+                <i class="icon-repeat icon-white"></i>
+                {{=_('Reset')}}</a>
+                {{pass}}   
+            </div>
+        </div>
+    </div>
+</div>
+
+{{use 'vis'}}
+{{link 'cron/show_workflow.js'}}
+
+{{if object.children_count > 0:}}
+<script>
+
+$(function(){
+    var options = {
+        url:'/async_tasks/view/{{=object.task_id}}?action=get_tasks',
+        onNode: function(data, node){
+            if (data.status == '0') node.color = 'lightgray';
+            else if (data.status == '1') node.color = 'lime';
+            else if (data.status == 'E') node.color = '#ed71f4';
+            else if (data.status == 'F') node.color = 'red';
+            else if (data.status == 'C') node.color = 'rgb(255,168,7)';
+        },
+        callback:function(workflow){
+            workflow.on('doubleClick', function(params){
+                if (params.nodes.length > 0){
+                    var node = params.nodes[0];
+                    window.open('/async_tasks/view/'+node);
+                }
+            });
+        }
+    };
+    var workflow = show_workflow('workflow', options);
+
+});
+
+</script>
+{{pass}}
+
+{{end}}

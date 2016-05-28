@@ -1,0 +1,51 @@
+{{extend "config_layout.html"}}
+
+{{block menu}}
+{{menu('config')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'log', 'async_tasks')}}
+{{end}}
+
+{{block content_main}}
+<div class="query">
+    {{embed query_form}}      
+</div>
+{{table_id = 'async_tasks_table'}}
+{{include "inc_mmgrid_table.html"}}
+<script>
+    $(function(){
+        create_table("{{=request.path}}", false, {pageSize:20, height:'auto'});
+
+        $('body').on('click', 'a.reset', function(e){
+            var self = $(this);
+            e.preventDefault();
+            var href = self.attr('href');
+            $.post(href).success(function(r){
+                if (r.success){
+                    $('#async_tasks_table').mmGrid('load');
+                    show_message(r.message);
+                } else {
+                    show_message(r.message, 'error');
+                }
+            })
+        });
+        $('body').on('click', 'a.cancel', function(e){
+            var self = $(this);
+            e.preventDefault();
+            var href = self.attr('href');
+            $.post(href).success(function(r){
+                if (r.success){
+                    $('#async_tasks_table').mmGrid('load');
+                    show_message(r.message);
+                } else {
+                    show_message(r.message, 'error');
+                }
+            })
+        });
+
+    });
+</script>
+
+{{end}}

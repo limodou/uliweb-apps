@@ -1,0 +1,13 @@
+{{extend "CronView/cron_layout.html"}}
+
+{{block content_main}}
+{{use "jquery", css_only=True}}
+<div class="content">
+    <div class="box col_12">
+        <h2>编辑作业</h2>
+        <div class="box-body">
+            {{<< form}}
+        </div>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,359 @@
+{{extend "CronView/cron_layout.html"}}
+
+{{block content_main}}
+<style type="text/css">
+#workflow {
+  width: 100%;
+  height: 450px;
+  border: 1px solid lightgray;
+}
+.form-horizontal .control-label {width:110px;}
+  .form-horizontal .controls {margin-left:120px;}
+  .form-control {width:100%;}
+    .form-group {margin:5px;}
+  .form-horizontal .controls label {
+    display: block;
+}
+</style>
+
+<t:bs.breadcrumb>
+    <a href="/cron" title="返回"></a>
+    <a href="/cron/{{=job.id}}" title="JOB: {{=job.title}}"></a>
+    <a active="active" title="任务工作流"></a>
+</t:bs.breadcrumb>
+
+<div class="tools" style="margin-bottom:5px;">
+    <a class="btn btn-primary" id="btnSave" href="/cron/{{=job.id}}/workflow?action=save">保存</a>
+</div>
+
+<div id="workflow"></div>
+
+{{use 'json2'}}
+{{use 'vis'}}
+{{use 'jquery_confirm'}}
+{{use 'bsmultiselect'}}
+
+<script>
+
+var job_id = {{=job.id}};
+var queues = {{=json_dumps(settings.ASYNC_TASKS_QUEUES.keys())}};
+
+function create_queue(v){
+  var queue_string = [];
+  var selected;
+  if (!$.isArray(v)) v = [v];
+  for(var i=0, _len=queues.length; i<_len; i++){
+    if (v && v.indexOf(queues[i]) != -1) selected = ' selected';
+    else selected = '';
+    queue_string.push('<option value="' + queues[i] + '"' + selected + '>' + queues[i] + '</option>');
+  }
+  return queue_string.join('');
+}
+var nodes_data = null;
+var workflow = null;
+var _nodes = null;
+var _edges = null;
+
+function destory(){
+    if (workflow !== null) {
+        workflow.destroy();
+        workflow = null;
+    }
+}
+
+function add_node(nodeData, callback){
+    $.confirm({
+        title: '增加新任务',
+        content: '<form class="form-horizontal">' +
+                 '<div class="control-group">' +
+                 '  <label for="field_label" class="control-label">任务标题</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_label"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_command" class="control-label">命令行</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_command"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_work_directory" class="control-label">执行目录</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_work_directory"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_queue" class="control-label">任务队列</label>' +
+                 '  <div class="controls">' +
+                 '    <select name="queue" id="field_queue" multiple="multiple">' +
+                    create_queue() +
+                 '    </select>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_timeout" class="control-label">超时时间(分钟)</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_timeout" value=30></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '</form>',
+        confirm: function(){
+            nodeData.level = 1;
+            nodeData.shape = 'box';
+            nodeData.command = this.$b.find('#field_command').val();
+            nodeData.title = nodeData.command;
+            nodeData.label = this.$b.find('#field_label').val() || nodeData.command;
+            nodeData.timeout = this.$b.find('#field_timeout').val();
+            nodeData.queue = this.$b.find('#field_queue').val();
+            nodeData.depend_tasks = [];
+            nodeData.work_directory = this.$b.find('#field_work_directory').val();
+            callback(nodeData);
+        },
+        onOpen: function(){
+          this.$b.find('#field_queue').multiselect({
+            includeSelectAllOption: true,
+            selectAllText: '全部选中',
+//            enableFiltering: true,
+//            enableCaseInsensitiveFiltering: true,
+            buttonClass: 'btn btn-default',
+            numberDisplayed: 2,
+            selectedClass: '',
+            maxHeight: 200
+            });
+        },
+        cancelButton: false
+    });
+
+    $('.confirmation-modal').on('shown.bs.modal', function(e){
+      console.log(e);
+    });
+}
+
+function edit_node(item, callback){
+    $.confirm({
+        title: '修改任务',
+        content: '<form class="form-horizontal">' +
+                 '<div class="control-group">' +
+                 '  <label for="field_label" class="control-label">任务标题</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_label" value="' + item.label + '"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_command" class="control-label">命令行</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_command" value="' + item.command + '"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_work_directory" class="control-label">执行目录</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_work_directory" value="' + item.work_directory + '"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_queue" class="control-label">任务队列</label>' +
+                 '  <div class="controls">' +
+                 '    <select name="queue" id="field_queue" multiple="multiple">' +
+                    create_queue(item.queue) +
+                 '    </select>' +
+                 '  </div>' +
+                 '</div>' +
+                 '<div class="control-group">' +
+                 '  <label for="field_timeout" class="control-label">超时时间(分钟)</label>' +
+                 '  <div class="controls">' +
+                 '    <input class="form-control" id="field_timeout" value="' + item.timeout + '"></input>' +
+                 '  </div>' +
+                 '</div>' +
+                 '</form>',
+        confirm: function(){
+            item.command = this.$b.find('#field_command').val();
+            item.label = this.$b.find('#field_label').val() || item.command;
+            item.work_directory = this.$b.find('#field_work_directory').val();
+            item.title = item.command;
+            item.queue = this.$b.find('#field_queue').val();
+            item.timeout = this.$b.find('#field_timeout').val();
+            callback(item);
+        },
+        onOpen: function(){
+          this.$b.find('#field_queue').multiselect({
+            includeSelectAllOption: true,
+            selectAllText: '全部选中',
+//            enableFiltering: true,
+//            enableCaseInsensitiveFiltering: true,
+            buttonClass: 'btn btn-default',
+            numberDisplayed: 2,
+            selectedClass: '',
+            maxHeight: 200
+            });
+        },
+        cancelButton: false
+    });
+}
+
+function delete_node(nodeData, callback){
+    var node, item, index, children;
+    $.each(_nodes._data, function(id, node){
+        item = _nodes.get(id);
+        for(var i=0, _len=nodeData.nodes.length; i<_len; i++){
+            index = item.depend_tasks.indexOf(nodeData.nodes[i]);
+            if (index!=-1){
+                item.depend_tasks.splice(index, 1);
+                _nodes.update({id:item.id, depend_tasks:item.depend_tasks});
+            }
+        }
+    });
+    callback(nodeData);
+}
+
+function delete_edge(edgeData, callback){
+    var edge, item;
+    for (var i=0, _len=edgeData.edges.length; i<_len; i++){
+        edge = _edges._data[edgeData.edges[i]];
+        item = _nodes.get(edge.from);
+        var index = item.depend_tasks.indexOf(edge.to);
+        if (index!=-1){
+            item.depend_tasks.splice(index, 1);
+            _nodes.update({id:item.id, depend_tasks:item.depend_tasks});
+        }
+    }
+    callback(edgeData);
+}
+
+function change_node_depends(from, to){
+    var item, index, item_to, parent;
+    item = _nodes.get(from);
+    index = item.depend_tasks.indexOf(to);
+    if (index == -1){
+        item.depend_tasks.push(to);
+        _nodes.update({id:from, depend_tasks:item.depend_tasks});
+    }
+}
+
+function load(){
+    $.get('/cron/'+job_id+'/workflow?action=get_tasks').success(function(r){
+        nodes_data = r.tasks;
+        draw();
+    });
+}
+
+function cal_level(){
+    var ids = _nodes.getIds();
+    var e = _edges, rel={};
+    //计算结点level值
+    _edges.forEach(function(x){
+        if (rel[x.to]) rel[x.to].push(x.from);
+        else rel[x.to] = [x.from];
+        index = ids.indexOf(x.from);
+        if (index > -1) ids.splice(index, 1);
+    });
+
+    function f(s, level){
+        var next;
+        for(var i=0, _len_i=s.length; i<_len_i; i++){
+            _nodes.update({id:s[i], level:level});
+            next = rel[s[i]];
+            if (next)
+                f(next, level+1);
+        }
+    }
+
+    f(ids, 1);
+
+}
+
+function draw(){
+    var v=[], x, y, item_x, item_y, e=[];
+
+    _nodes = new vis.DataSet({});
+    _edges = new vis.DataSet({});
+
+    //生成node和edge数据
+    for(var i=0, _len_i=nodes_data.length; i<_len_i; i++){
+        item_x = nodes_data[i];
+        item_x.shape = 'box';
+
+        _nodes.add(item_x);
+
+        for(var j=0, _len_j=item_x.depend_tasks.length; j<_len_j; j++){
+            _id = item_x.depend_tasks[j];
+            y = {from:item_x.id, to:_id, arrows:'to', label:'依赖'};
+            _edges.add(y);
+        }
+    }
+
+    cal_level();
+
+
+    // create a network
+    var container = document.getElementById('workflow');
+    var data = {
+        nodes: _nodes,
+        edges: _edges
+    };
+    var options = {
+       layout: {
+            hierarchical: {
+                <!--direction: 'UD'-->
+                <!--, sortMethod: 'hubsize'-->
+            }
+            <!--, improvedLayout: true-->
+        },
+        manipulation: {
+            initiallyActive: true,
+            addNode: function(nodeData, callback) {
+                add_node(nodeData, callback);
+            },
+            addEdge: function(edgeData, callback) {
+                edgeData.arrows = 'to';
+                edgeData.label = '依赖';
+                if (edgeData.from != edgeData.to) {
+                    change_node_depends(edgeData.from, edgeData.to);
+                    callback(edgeData);
+                    cal_level();
+                }
+            },
+            editNode: function(nodeData, callback){
+                edit_node(nodeData, callback);
+            },
+            deleteNode: function(nodeData, callback){
+                delete_node(nodeData, callback);
+            },
+            editEdge: false,
+            deleteEdge: function(edgeData, callback){
+                delete_edge(edgeData, callback);
+            }
+        }
+    }
+    workflow = new vis.Network(container, data, options);
+    workflow.on('doubleClick', function(e){
+        var node;
+        if (e.nodes.length > 0){
+            node = _nodes.get(e.nodes[0]);
+            edit_node(node, function(item){
+                _nodes.update(item);
+            });
+        }
+    })
+
+};
+
+
+$(function(){
+    load();
+    $('#btnSave').click(function(e){
+        e.preventDefault();
+        var data = {nodes:JSON.stringify(_nodes._data)};
+        $.post($(this).attr('href'), data).success(function(r){
+            if (r.success) {
+                show_message('保存成功');
+                load();
+            }
+        });
+    });
+});
+
+</script>
+
+{{end}}

@@ -1,0 +1,38 @@
+{%##
+<t:cron.workflow id="workflow" job="job_id" option="option">
+</t:cron.workflow>
+
+==>
+
+<div id="workflow"></div>
+
+{{use 'vis'}}
+{{link 'cron/show_workflow.js'}}
+
+<script>
+    var job_id = "job_id";
+
+    $(function(){
+        var opts = $.extend(true, {
+            url:'/cron/'+job_id+'/view'+'?action=get_tasks'
+        }, option||{}};
+        var workflow = show_workflow('workflow', options);
+    });
+</script>
+##%}
+
+<div id="{%=_attrs['id']%}" style="{%=_attrs['style']%}"></div>
+
+{{use 'vis'}}
+{{link 'cron/show_workflow.js'}}
+
+<script>
+    var job_id = "{%=_attrs['job']%}";
+
+    $(function(){
+        var opts = $.extend(true, {
+            url:'/cron/'+job_id+'/view'+'?action=get_tasks'
+        }, {%=_attrs.get('option', 'null') %}||{});
+        var workflow = show_workflow('workflow', opts);
+    });
+</script>

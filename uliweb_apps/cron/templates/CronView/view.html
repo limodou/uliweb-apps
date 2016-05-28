@@ -1,0 +1,68 @@
+{{extend "CronView/cron_layout.html"}}
+
+{{block content_main}}
+<t:bs.breadcrumb>
+    <a href="/cron" title="返回"></a>
+    <a active="active" title="Cron Job - [{{=job_id}} - {{=job.title}} - {{=job.time}}]"></a>
+</t:bs.breadcrumb>
+
+<div class="query">
+    {{<< query_form}}
+</div>
+
+<div class="tools" style="margin-bottom:5px;">
+    <a class="btn btn-primary" href="/cron/{{=job_id}}/start">启动作业</a>
+    <a class="btn btn-info" href="/cron/{{=job_id}}/edit">编辑作业</a>
+    <a class="btn btn-info" href="/cron/{{=job_id}}/workflow">编辑任务流</a>
+</div>
+
+{{use 'jquery_confirm'}}
+<script>
+    var option = {
+        callback:function(workflow){
+            workflow.on('doubleClick', function(params){
+                if (params.nodes.length > 0){
+                    var node = params.nodes[0];
+                    $.confirm({
+                        title:'确认任务执行',
+                        content: '是否要执行当前的任务?',
+                        confirmButton:'执行',
+                        cancelButton:'取消',
+                        confirm: function(){
+                            $.post('/cron/start_task/'+node).success(function(r){
+                                if(r.success)
+                                    window.open('/async_tasks/view/'+r.id);
+                                else
+                                    show_message(r.message, 'error');
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+</script>
+<t:cron.workflow id="workflow" job="{{=job.id}}" option="option"
+                 style="width:100%;height:300px;border:1px solid lightgray;margin-bottom:5px;">
+</t:cron.workflow>
+
+{{table_id = 'cron_table'}}
+{{include "inc_mmgrid_table.html"}}
+<script>
+    $(function(){
+        create_table("{{=request.path}}", false, {pageSize:20, height:'auto'});
+
+        $('body').on('click', 'a.cancelBtn', function(e){
+            e.preventDefault();
+            var href=$(this).attr('href');
+            $.post(href).success(function(r){
+                show_message(r.message);
+                if (r.success){
+                    $('#cron_table').mmGrid('load');
+                }
+            });
+        });
+    });
+</script>
+
+{{end}}
