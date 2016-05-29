@@ -1,0 +1,9 @@
+{{extend "site/layout2.html"}}
+
+{{block mainmenu}}
+{{<< mainmenu('app_demo')}}
+{{end}}
+
+{{block sidemenu}}
+{{<< sidemenu('APPMENU', 'cron')}}
+{{end}}
