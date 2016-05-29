@@ -1,0 +1,31 @@
+{{extend "ui/ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'box')}}
+{{end}}
+
+{{block content_main}}
+<script src="{{=url_for_static('adminlte/adminlte-widgets.js')}}"></script>
+
+<div class="row">
+  <div class="col-md-3">
+    <box type="primary" title="Test" border="true" collapse="true" remove="true">
+        <h3>Title</h3>
+    </box>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    <pre>
+&lt;box type="primary" title="Test" border="true" collapse="true" remove="true"&gt;
+    &lt;h3&gt;Title&lt;/h3&gt;
+&lt;/box&gt;
+    </pre>
+  </div>
+</div>
+
+<script>
+  riot.mount('*')
+</script>
+{{end}}

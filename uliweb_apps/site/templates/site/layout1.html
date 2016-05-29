@@ -1,5 +1,9 @@
 {{extend "layout/1column.html"}}
 
+{{block mainmenu}}
+{{<< mainmenu()}}
+{{end}}
+
 {{block header_custom_menu}}
   {{include "site/inc_userinfo.html"}}
 {{end}}

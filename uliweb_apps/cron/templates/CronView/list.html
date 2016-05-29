@@ -4,18 +4,6 @@
 <div class="tools">
     <a class="btn btn-primary" href="/cron/add">创建作业</a>
 </div>
-{{##
-<div class="query">
-    {{<< query_form}}
-</div>
-{{table_id = 'cron_table'}}
-{{include "inc_mmgrid_table.html"}}
-<script>
-    $(function(){
-        create_table("{{=request.path}}", false, {pageSize:20, height:'auto'});
-    });
-</script>
-##}}
 <t:listview>
     <pagination></pagination>
 </t:listview>

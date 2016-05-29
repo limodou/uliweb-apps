@@ -8,3 +8,4 @@ dist
 _git
 demo/sessions
 demo/database.db
+demo/alembic
