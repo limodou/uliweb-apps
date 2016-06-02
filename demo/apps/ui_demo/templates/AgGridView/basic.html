@@ -1,0 +1,36 @@
+{{extend "ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'ag-grid', 'basic')}}
+{{end}}
+
+{{block content_main}}
+{{use "ui.ag-grid"}}
+
+<div id="myGrid" style="height: 100%;" class="ag-fresh"></div>
+<script>
+$(function(){
+    var columnDefs = [
+        {headerName: "Make", field: "make"},
+        {headerName: "Model", field: "model"},
+        {headerName: "Price", field: "price"}
+    ];
+
+    var rowData = [
+        {make: "Toyota", model: "Celica", price: 35000},
+        {make: "Ford", model: "Mondeo", price: 32000},
+        {make: "Porsche", model: "Boxter", price: 72000}
+    ];
+
+    var gridOptions = {
+        columnDefs: columnDefs,
+        rowData: rowData
+    };
+
+    // wait for the document to be loaded, otherwise
+    // ag-Grid will not find the div in the document.
+    var eGridDiv = document.querySelector('#myGrid');
+    new agGrid.Grid(eGridDiv, gridOptions);
+});
+</script>
+{{end}}

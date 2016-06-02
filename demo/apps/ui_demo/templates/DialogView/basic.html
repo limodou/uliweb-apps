@@ -1,0 +1,9 @@
+{{extend "ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'dialog', 'basic')}}
+{{end}}
+
+{{block content_main}}
+<button class="btn btn-primary" onclick="show_message('Hello')">Toastr</button>
+{{end}}

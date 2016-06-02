@@ -1,14 +1,10 @@
 {{extend "cron_layout.html"}}
 
 {{block content_main}}
-<t:bs.breadcrumb>
+<t:breadcrumb>
     <a href="/cron" title="返回"></a>
     <a active="active" title="Cron Job - [{{=job_id}} - {{=job.title}} - {{=job.time}}]"></a>
-</t:bs.breadcrumb>
-
-<div class="query">
-    {{<< query_form}}
-</div>
+</t:breadcrumb>
 
 <div class="tools" style="margin-bottom:5px;">
     <a class="btn btn-primary" href="/cron/{{=job_id}}/start">启动作业</a>
@@ -16,7 +12,9 @@
     <a class="btn btn-info" href="/cron/{{=job_id}}/workflow">编辑任务流</a>
 </div>
 
-{{use 'jquery_confirm'}}
+{{use "ui.vis"}}
+{{use "ui.jquery.confirm"}}
+
 <script>
     var option = {
         callback:function(workflow){
@@ -46,11 +44,13 @@
                  style="width:100%;height:300px;border:1px solid lightgray;margin-bottom:5px;">
 </t:cron.workflow>
 
-{{table_id = 'cron_table'}}
-{{include "inc_mmgrid_table.html"}}
+<t:listview>
+    <pagination></pagination>
+</t:listview>
+
 <script>
     $(function(){
-        create_table("{{=request.path}}", false, {pageSize:20, height:'auto'});
+        <!--create_table("{{=request.path}}", false, {pageSize:20, height:'auto'});-->
 
         $('body').on('click', 'a.cancelBtn', function(e){
             e.preventDefault();

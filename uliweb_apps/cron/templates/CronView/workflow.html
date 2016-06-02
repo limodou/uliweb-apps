@@ -1,4 +1,4 @@
-{{extend "CronView/cron_layout.html"}}
+{{extend "cron_layout.html"}}
 
 {{block content_main}}
 <style type="text/css">
@@ -16,11 +16,11 @@
 }
 </style>
 
-<t:bs.breadcrumb>
+<t:breadcrumb>
     <a href="/cron" title="返回"></a>
     <a href="/cron/{{=job.id}}" title="JOB: {{=job.title}}"></a>
     <a active="active" title="任务工作流"></a>
-</t:bs.breadcrumb>
+</t:breadcrumb>
 
 <div class="tools" style="margin-bottom:5px;">
     <a class="btn btn-primary" id="btnSave" href="/cron/{{=job.id}}/workflow?action=save">保存</a>
@@ -28,10 +28,9 @@
 
 <div id="workflow"></div>
 
-{{use 'json2'}}
-{{use 'vis'}}
-{{use 'jquery_confirm'}}
-{{use 'bsmultiselect'}}
+{{use 'ui.vis'}}
+{{use 'ui.jquery.confirm'}}
+{{use 'ui.bootstrap.multiselect'}}
 
 <script>
 
@@ -41,9 +40,10 @@ var queues = {{=json_dumps(settings.ASYNC_TASKS_QUEUES.keys())}};
 function create_queue(v){
   var queue_string = [];
   var selected;
-  if (!$.isArray(v)) v = [v];
+  var value = [];
+  if (v && !$.isArray(v)) value = [v];
   for(var i=0, _len=queues.length; i<_len; i++){
-    if (v && v.indexOf(queues[i]) != -1) selected = ' selected';
+    if (value.indexOf(queues[i]) != -1) selected = ' selected';
     else selected = '';
     queue_string.push('<option value="' + queues[i] + '"' + selected + '>' + queues[i] + '</option>');
   }
@@ -122,11 +122,12 @@ function add_node(nodeData, callback){
             maxHeight: 200
             });
         },
-        cancelButton: false
+        cancelButton: false,
+        columnClass: 'col-md-6 col-md-offset-3'
     });
 
     $('.confirmation-modal').on('shown.bs.modal', function(e){
-      console.log(e);
+
     });
 }
 
@@ -336,7 +337,6 @@ function draw(){
             });
         }
     })
-
 };
 
 

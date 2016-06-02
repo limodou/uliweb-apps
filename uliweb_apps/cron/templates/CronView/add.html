@@ -1,19 +1,13 @@
-{{extend "CronView/cron_layout.html"}}
+{{extend "cron_layout.html"}}
 
 {{block content_main}}
-{{use "jquery", css_only=True}}
-<div class="content">
-    <div class="box col_12">
-        <h2>创建新作业</h2>
-        <div class="box-body">
-            {{<< form}}
-        </div>
-    </div>
-</div>
+<script src="{{=url_for_static('adminlte/adminlte-widgets.js')}}"></script>
+
+<box type="success" border="true" subject="创建新作业">
+    {{<< form}}
+</box>
 
 <script>
-    $(function(){
-        $('#field_time').jqCron();
-    });
+    riot.mount('box')
 </script>
 {{end}}

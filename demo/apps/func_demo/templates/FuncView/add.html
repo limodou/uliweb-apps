@@ -1,0 +1,9 @@
+{{extend "func_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('FUNCMENU', 'add')}}
+{{end}}
+
+{{block content_main}}
+  {{<< form}}
+{{end}}
