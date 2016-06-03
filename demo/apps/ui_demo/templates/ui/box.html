@@ -7,21 +7,28 @@
 {{block content_main}}
 <script src="{{=url_for_static('adminlte/adminlte-widgets.js')}}"></script>
 
-<div class="row">
-  <div class="col-md-3">
-    <box type="primary" title="Test" border="true" collapse="true" remove="true">
-        <h3>Title</h3>
-    </box>
-  </div>
-</div>
+<callout subject="callout 示例" type="info">
+  <pre>
+    &lt;callout subject="subect" type="info"&gt;
+      &lt;p&gt;This is a test&lt;/p&gt;
+    &lt;/callout&gt;
+  </pre>
+</callout>
 
 <div class="row">
   <div class="col-md-3">
-    <pre>
-&lt;box type="primary" title="Test" border="true" collapse="true" remove="true"&gt;
-    &lt;h3&gt;Title&lt;/h3&gt;
-&lt;/box&gt;
-    </pre>
+    <box type="primary" border="true" collapse="true" remove="true">
+        <yield to="body">
+          <h3>Title</h3>
+        </yield>
+    </box>
+  </div>
+  <div class="col-md-3">
+    <box type="primary" subject="Test" border="true" collapse="true" remove="true">
+        <yield to="body">
+          <h3>Title</h3>
+        </yield>
+    </box>
   </div>
 </div>
 
