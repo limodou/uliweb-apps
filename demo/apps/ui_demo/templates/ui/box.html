@@ -7,7 +7,7 @@
 {{block content_main}}
 <script src="{{=url_for_static('adminlte/adminlte-widgets.js')}}"></script>
 
-<callout subject="callout 示例" type="info">
+<callout subject="callout 示例" option="info">
   <pre>
     &lt;callout subject="subect" type="info"&gt;
       &lt;p&gt;This is a test&lt;/p&gt;
@@ -17,14 +17,14 @@
 
 <div class="row">
   <div class="col-md-3">
-    <box type="primary" border="true" collapse="true" remove="true">
+    <box option="primary" border="true" collapse="true" remove="true">
         <yield to="body">
           <h3>Title</h3>
         </yield>
     </box>
   </div>
   <div class="col-md-3">
-    <box type="primary" subject="Test" border="true" collapse="true" remove="true">
+    <box option="primary" subject="Test" border="true" collapse="true" remove="true">
         <yield to="body">
           <h3>Title</h3>
         </yield>
