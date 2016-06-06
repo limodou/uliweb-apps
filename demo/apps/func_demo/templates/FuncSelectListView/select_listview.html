@@ -4,26 +4,20 @@
 {{<< sidemenu('FUNCMENU', 'generic', 'select_listview')}}
 {{end}}
 
+{{block content_header}}
+<content-header subject="普通select查询示例">
+  <breadcrumb items="[{href:'/func', label:'常用功能'}, {label:'Select列表展示'}]"></breadcrumb>
+</content-header>
+{{end}}
+
 {{block content_main}}
-<script src="{{=url_for_static('adminlte/adminlte-widgets.js')}}"></script>
+<script src="{{=url_for_static('tags/common-widgets.js')}}"></script>
+<script src="{{=url_for_static('tags/common-layout.js')}}"></script>
+<script src="{{=url_for_static('query_condition.js')}}"></script>
 
-<t:breadcrumb>
-    <a href="/func" title="常用功能"></a>
-    <a title="Select列表展示"></a>
-</t:breadcrumb>
+</content-header>
 
-<box type="default" subject="查询条件" collapse="true" border="true">
-    <yield to="tools">
-        <button type="button" class="btn btn-info btn-xs btn-flat">
-            查询数据
-        </button>
-    </yield>
-    <yield to="body">
-        <div class="query">
-            {{<< query_form}}
-        </div>
-    </yield>
-</box>
+<query-condition></query-condition>
 
 {{table_id='table_id'}}
 {{include "inc_mmgrid_table.html"}}
@@ -34,7 +28,35 @@
 </script>
 
 <script>
-    riot.mount('box');
+    riot.mount('box')
+    riot.mount('content-header')
+    /*
+    var query = {
+        fields:[
+          {name:'subject', type:'string', label:'字符串'},
+          {name:'strtest', type:'string', label:'测试一个很长的标签'},
+          {name:'password', type:'password', label:'密码', placeholder:'请输入密码'},
+          {name:'single', type:'select', label:'单选', choices:[['1', '选择一'], ['2', '选择二'], ['3', '选择三']],
+            placeholder:'请选择'},
+          {name:'multiple', type:'select', label:'多选', choices:[['1', '选择一'], ['2', '选择二'], ['3', '选择三']],
+            placeholder:'请选择', multiple:true, opts:{allSelectedText:'所有选项已经选中'}},
+          {name:'date', type:'date', label:'日期', placeholder:'请输入日期'},
+          {name:'datetime', type:'datetime', label:'日期时间', placeholder:'请输入日期时间'}
+        ],
+        layout: [
+          ['subject', 'strtest'],
+          ['password', 'single', 'multiple'],
+          ['date', 'datetime']
+        ],
+        data: {
+          subject: 'test',
+          date: '2016-6-3',
+          multiple: ['2']
+        }
+    }
+    */
+    var query = {{<< json_dumps(query_form)}}
+    riot.mount('query-condition', query)
 </script>
 
 

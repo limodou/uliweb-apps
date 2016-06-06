@@ -5,14 +5,15 @@ from uliweb import expose, functions
 class FuncSelectListView(object):
     def create_query(self, url):
         from uliweb.form import UnicodeField, SelectField, StringField
-        from uliweb.utils.generic import QueryView
+        from uliweb_layout.form.query_view import QueryView
 
         QueryForm = functions.get_form('QueryForm')
 
         subject = StringField('标题')
-        fields = [('subject', subject)]
-        layout = [('subject',)]
-        query = QueryView('user', ok_url=url, fields=fields, layout=layout, form_cls=QueryForm)
+        author = StringField('作者')
+        fields = [('subject', subject), ('author', author)]
+        layout = [('subject',), ('author', )]
+        query = QueryView(fields=fields, layout=layout, form_cls=QueryForm)
         return query
 
     def select_listview(self):
@@ -25,6 +26,10 @@ class FuncSelectListView(object):
         #create query
         query_view = self.create_query(url_for(self.select_listview))
         c = query_view.run()
+
+        print  query_view.get_json()
+        print 'query-conditon', c
+        print 'request', request.values
 
         #处理条件
         condition = None
@@ -54,6 +59,6 @@ class FuncSelectListView(object):
 
         else:
             result = view.run()
-            result.update({'query_form':query_view.form,
+            result.update({'query_form':query_view.get_json(),
                            'table':view})
             return result
