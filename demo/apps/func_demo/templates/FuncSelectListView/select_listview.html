@@ -15,8 +15,6 @@
 <script src="{{=url_for_static('tags/common-layout.js')}}"></script>
 <script src="{{=url_for_static('query_condition.js')}}"></script>
 
-</content-header>
-
 <query-condition></query-condition>
 
 {{table_id='table_id'}}
@@ -28,7 +26,6 @@
 </script>
 
 <script>
-    riot.mount('box')
     riot.mount('content-header')
     /*
     var query = {
