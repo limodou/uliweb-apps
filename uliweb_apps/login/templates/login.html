@@ -16,11 +16,11 @@
     <form action="" method="post" id="login-form">
       <input type="hidden" name="next"></input>
       <div class="form-group has-feedback">
-        <input id="field_username" name="username" class="form-control" placeholder="username">
+        <input id="field_username" name="username" class="form-control" required placeholder="{{=_('username')}}">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" name="password" placeholder="Password">
+        <input type="password" class="form-control" name="password" required placeholder="{{=_('password')}}">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
@@ -28,14 +28,14 @@
           <div class="checkbox">
             <label>
               <input id="field_rememberme" name="rememberme" type="checkbox">
-              Remember Me
+              {{=_('Remember Me')}}
             </label>
           </div>
         </div>
         <!-- /.col -->
         <div class="row">
           <div class="col-xs-offset-1 col-xs-10">
-            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            <button type="submit" class="btn btn-primary btn-block btn-flat">{{=_('Sign In')}}</button>
           </div>
         </div>
       </div>
