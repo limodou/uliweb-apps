@@ -1,0 +1,23 @@
+{{extend "site/layout2.html"}}
+
+{{block mainmenu}}
+{{<< mainmenu('app_demo')}}
+{{end}}
+
+{{block sidemenu}}
+{{<< sidemenu('APPMENU', 'permission')}}
+{{end}}
+
+{{block content_header_title}}
+  <h1>普通select查询示例
+    <small>小标题</small>
+  </h1>
+</h1>
+{{end}}
+
+{{block content_header_breadcrumb}}
+  <ol class="breadcrumb">
+    <li><a href="/func">常用功能</a></li>
+    <li>Select列表展示</li>
+  </ol>
+{{end}}

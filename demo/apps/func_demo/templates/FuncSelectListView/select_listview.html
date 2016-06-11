@@ -4,15 +4,22 @@
 {{<< sidemenu('FUNCMENU', 'generic', 'select_listview')}}
 {{end}}
 
-{{block content_header}}
-<content-header subject="普通select查询示例">
-  <breadcrumb items="[{href:'/func', label:'常用功能'}, {label:'Select列表展示'}]"></breadcrumb>
-</content-header>
+{{block content_header_title}}
+  <h1>普通select查询示例
+    <small>小标题</small>
+  </h1>
+</h1>
+{{end}}
+
+{{block content_header_breadcrumb}}
+  <ol class="breadcrumb">
+    <li><a href="/func">常用功能</a></li>
+    <li>Select列表展示</li>
+  </ol>
 {{end}}
 
 {{block content_main}}
 <script src="{{=url_for_static('tags/common-widgets.js')}}"></script>
-<script src="{{=url_for_static('tags/common-layout.js')}}"></script>
 <script src="{{=url_for_static('query_condition.js')}}"></script>
 
 <query-condition></query-condition>
@@ -26,7 +33,6 @@
 </script>
 
 <script>
-    riot.mount('content-header')
     /*
     var query = {
         fields:[

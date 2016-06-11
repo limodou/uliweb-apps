@@ -1,0 +1,36 @@
+{{extend "permission_layout.html"}}
+
+{{block sidemenu}}
+    <category></category>
+
+{{link "rbac_man/jquery.mjs.nestedSortable.js"}}
+{{link "modules/dataset.js"}}
+{{link "modules/riot/parents.js"}}
+{{link "tags/category-edit.js"}}
+
+<script>
+  var onSave = function(data){
+    var d = JSON.stringify(data);
+    $.post('/admin/permission/category/save', {data:d}).success(function(r){
+        if (r.success)
+            show_message(r.message)
+        else
+            show_message(r.message, 'error')
+    });
+  }
+  $.get('/admin/permission/category/list').success(function(r){
+      riot.mount('category', {data:r, onSave:onSave})
+  });
+</script>
+
+{{end}}
+
+
+{{block content_main}}
+    <div class="tools">
+        <a class="btn btn-primary" href="/admin/permission/add">创建作业</a>
+    </div>
+    <t:listview>
+        <pagination></pagination>
+    </t:listview>
+{{end}}
