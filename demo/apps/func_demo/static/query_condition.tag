@@ -67,7 +67,7 @@
                 <div each={field in row} class="condition-cell">
                    <span class="condition-label">{ fields[this.field].label || field }</span>
                    <input-field field={ fields[field] } data={data}
-                     type={ fields[this.field].type || 'string' }></input-field>
+                     type={ fields[this.field].type || 'str' }></input-field>
                 </div>
                 <div show={ i==0 && !show } class="condition-cell" >
                     <button class="btn btn-primary btn-flat" type="submit">查询</button>
@@ -134,8 +134,8 @@
 </query-condition>
 
 <input-field>
-    <input type="text" name={ opts.field.name } class="form-control" field-type="string"
-      if={opts.type=='string'} placeholder={opts.field.placeholder}/>
+    <input type="text" name={ opts.field.name } class="form-control" field-type="str"
+      if={opts.type=='str'} placeholder={opts.field.placeholder}/>
 
     <input type="password" name={ opts.field.name } class="form-control" field-type="password"
       if={opts.type=='password'} placeholder={opts.field.placeholder}/>

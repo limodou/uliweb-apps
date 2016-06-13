@@ -1,10 +1,25 @@
-{{extend "func_demo_layout.html"}}
+{{extend "ui_demo_layout.html"}}
 
 {{block sidemenu}}
-{{<< sidemenu('FUNCMENU', 'generic', 'list')}}
+{{<< sidemenu('UIMENU', 'ag-grid', 'remote')}}
+{{end}}
+
+{{block content_header_title}}
+  <h1>后台读取表格示例
+    <small>ag-grid</small>
+  </h1>
+</h1>
+{{end}}
+
+{{block content_header_breadcrumb}}
+  <ol class="breadcrumb">
+    <li><a href="/ui">UI DEMO</a></li>
+    <li>Ag-Grid后台读取示例</li>
+  </ol>
 {{end}}
 
 {{block content_main}}
+
 <!-- 引入 ui.ag-grid -->
 {{use "ui.ag-grid"}}
 <!-- 引入 grid.js (包含ag-grid tag)-->
@@ -20,7 +35,8 @@
 <ag-grid></ag-grid>
 <div class="clearfix tools">
   <div class="pull-right">
-    <a class="btn btn-flat btn-info btn-sm" href="">下载</a>
+    <button class="btn btn-flat btn-primary btn-sm">上传</button>
+    <button class="btn btn-flat btn-info btn-sm">下载</button>
   </div>
   <div id="pagination" class="pull-left"></div>
 </div>
@@ -32,11 +48,9 @@
 
         //以下几个是用于分页的配置项
         total: {{=total}},
-        pageRows: 10,
-        //自动撑满
-        autoFit: true,
+        pageRows: 2,
         //pagination: '#pagination
-        url: "{{<< table.data_url}}"
+        url: "{{<< functions.request_url()}}"
 
     };
 

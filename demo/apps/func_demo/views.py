@@ -15,13 +15,21 @@ class FuncView(functions.MultiView):
         return self._add('blog', ok_url=url_for(self.list), pre_save=pre_save)
 
     def _get_query_view(self):
+        from uliweb_layout.form.query_view import QueryModelView
+
+        QueryForm = functions.get_form('QueryForm')
         fields = [
             {'name':'subject', 'like':'_%'},
+            {'name':'created_time', 'op':'=='},
+            {'name':'type', 'label':'类型', 'type':'select', 'choices':[('1', '是'), ('0', '否')]},
         ]
         layout = [
-                'subject'
+                ['subject'],
+                ['created_time', 'type']
             ]
-        return self._query_view('blog', fields=fields, layout=layout)
+        query = QueryModelView('blog', fields=fields, layout=layout, form_cls=QueryForm)
+        return query
 
     def list(self):
-        return self._list('blog', queryview=self._get_query_view())
+        query = self._get_query_view()
+        return self._list('blog', queryview=query, queryform=query.get_json())

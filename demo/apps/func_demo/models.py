@@ -20,5 +20,6 @@ class Blog(Model):
 
     class Table:
         fields = [
+            {'name':'id', 'width':40, 'align':'center'},
             'subject', 'author', 'created_time', 'modified_time'
         ]
