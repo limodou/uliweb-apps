@@ -59,6 +59,9 @@
         .select2-container--bootstrap .select2-selection--single {
           line-height: 30px;
         }
+        /*隐藏单选radio按钮*/
+        .multiselect-container li input[type="radio"] {margin-left:-200px;}
+
     </style>
 
     <div class="query-condition">

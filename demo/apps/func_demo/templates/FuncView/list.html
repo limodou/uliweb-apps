@@ -20,7 +20,7 @@
 <ag-grid></ag-grid>
 <div class="clearfix tools">
   <div class="pull-right">
-    <a class="btn btn-flat btn-info btn-sm" href="{{<< table.download_url}}">下载</a>
+    <a class="btn btn-flat btn-info btn-sm" href="{{<< table.download_url()}}">下载</a>
   </div>
   <div id="pagination" class="pull-left"></div>
 </div>
@@ -32,7 +32,7 @@
 
         //以下几个是用于分页的配置项
         total: {{=total}},
-        pageRows: 10,
+        pageRows: 2,
         //自动撑满
         autoFit: true,
         //pagination: '#pagination

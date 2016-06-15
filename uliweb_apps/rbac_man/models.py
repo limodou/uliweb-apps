@@ -9,6 +9,9 @@ class Perm_Category(Model):
     name = Field(str, max_length=255, verbose_name=u'名称', index=True, unique=True)
     parent = Reference(verbose_name=u'父分类')
     order = Field(int, verbose_name=u'序号', index=True)
+    deleted = Field(bool, verbose_name=u'删除标志')
+    modified_user = Reference('user', verbose_name=u'修改人')
+    modified_time = Field(DATETIME, verbose_name=u'修改时间', auto_now=True, auto_now_add=True)
 
     def __unicode__(self):
         return self.name

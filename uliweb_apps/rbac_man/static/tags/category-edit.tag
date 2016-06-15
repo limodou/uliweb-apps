@@ -116,6 +116,7 @@
       bottom: 0px;
       width: 100%;
       background-color: #3c5681;
+      padding:0;
     }
     .tools a.tool-btn {
       color: #9dabc1;
@@ -207,20 +208,20 @@
      * 处理返回
      */
     this.save = function() {
+      var result = self.serialize()
+      self._data.update(result)
+      self._old_data = self._data.get()
+      self.edit_text = '编辑'
+      self.editing = false
+      self.data = self._data.tree()
       if (opts.onSave){
-        var result = self.serialize()
-        self._data.update(result)
-        self._old_data = self._data.get()
-        self.edit_text = '编辑'
-        self.editing = false
-        self.data = self._data.tree()
-        opts.onSave(self._data.get({order:['_parent', 'order']}))
+        opts.onSave(self._data.get({order:['parent', 'order']}))
       }
     }
 
     this.edit = function(e) {
       if (e.keyCode == 13){ //enter
-        self._data.add({name:self.new_item.value, _parent:0})
+        self._data.add({name:self.new_item.value, parent:0})
         self.data = self._data.tree()
         self.new_item.value = ''
       } else if (e.keyCode == 27) { //esc
@@ -260,27 +261,40 @@
     }
 
     this.serialize = function () {
-      return $('.sortable', self.root).nestedSortable('serialize');
+      return $('.sortable', self.root).nestedSortable('serialize', {parentField:'parent'});
     }
 
     this.remove = function(e){
+      var delete_children = function(p) {
+        var item
+        if (p.nodes && p.nodes.length > 0) {
+          for(var i=0, len=p.nodes.length; i<len; i++) {
+            item = p.nodes[i]
+            delete_children(item)
+            self._data.remove(item.id)
+          }
+        }
+      }
       var id = e.item.item.id
-      var flag
+      var flag = false
       var find = function (d, id) {
         d.forEach(function(v, i){
-          if (v.id == id) {
-            d.splice(i, 1)
+          if (v.id == id) { //找到后删除子结点
+            delete_children(v)
             self._data.remove(id)
             return true
           }
           if (v.nodes && v.nodes.length > 0) {
             flag = find (v.nodes, id)
             if (flag)
-              return flag
+              return true
           }
+
         })
       }
       find(self.data, id)
+      self.data = self._data.tree()
+      self.update()
     }
   </script>
 </category>
