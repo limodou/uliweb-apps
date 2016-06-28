@@ -138,7 +138,7 @@
 
 <input-field>
     <input type="text" name={ opts.field.name } class="form-control" field-type="str"
-      if={opts.type=='str'} placeholder={opts.field.placeholder}/>
+      if={opts.type=='str' || opts.type=='unicode'} placeholder={opts.field.placeholder}/>
 
     <input type="password" name={ opts.field.name } class="form-control" field-type="password"
       if={opts.type=='password'} placeholder={opts.field.placeholder}/>
@@ -181,7 +181,7 @@
             buttonClass: 'btn btn-default btn-flat',
             numberDisplayed: 2,
             selectedClass: '',
-            nonSelectedText: opts.field.placeholder,
+            nonSelectedText: opts.field.placeholder || '请选择',
             maxHeight: 200
             }, opts.field.opts || {})
         load('ui.bootstrap.multiselect', function(){

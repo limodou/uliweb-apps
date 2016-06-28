@@ -12,7 +12,12 @@ class FuncView(functions.MultiView):
             if request.user:
                 data['author'] = request.user.id
 
-        return self._add('blog', ok_url=url_for(self.list), pre_save=pre_save)
+        def post_created_form(fcls, model):
+            fcls.subject.placeholder = '标题'
+            fcls.subject.required = True
+
+        return self._add('blog', ok_url=url_for(self.list), pre_save=pre_save,
+                         post_created_form=post_created_form)
 
     def _get_query_view(self):
         from uliweb_layout.form.query_view import QueryModelView

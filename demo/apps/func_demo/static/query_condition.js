@@ -38,7 +38,7 @@ riot.tag2('query-condition', '<div class="query-condition"> <form method="get" a
 
 });
 
-riot.tag2('input-field', '<input type="text" name="{opts.field.name}" class="form-control" field-type="str" if="{opts.type==\'str\'}" placeholder="{opts.field.placeholder}"> <input type="password" name="{opts.field.name}" class="form-control" field-type="password" if="{opts.type==\'password\'}" placeholder="{opts.field.placeholder}"> <select __multiple="{opts.field.multiple}" if="{opts.type==\'select\'}" field-type="select" style="width:200px" name="{opts.field.name}"> <option if="{opts.field.placeholder && !opts.field.multiple}">{opts.field.placeholder}</option> <option each="{value in opts.field.choices}" value="{value[0]}"> {value[1]} </option> </select> <input type="text" name="{opts.field.name}" class="form-control" field-type="date" if="{opts.type==\'date\'}" placeholder="{opts.field.placeholder}"> <input type="text" name="{opts.field.name}" class="form-control" field-type="datetime" if="{opts.type==\'datetime\'}" placeholder="{opts.field.placeholder}">', '', '', function(opts) {
+riot.tag2('input-field', '<input type="text" name="{opts.field.name}" class="form-control" field-type="str" if="{opts.type==\'str\' || opts.type==\'unicode\'}" placeholder="{opts.field.placeholder}"> <input type="password" name="{opts.field.name}" class="form-control" field-type="password" if="{opts.type==\'password\'}" placeholder="{opts.field.placeholder}"> <select __multiple="{opts.field.multiple}" if="{opts.type==\'select\'}" field-type="select" style="width:200px" name="{opts.field.name}"> <option if="{opts.field.placeholder && !opts.field.multiple}">{opts.field.placeholder}</option> <option each="{value in opts.field.choices}" value="{value[0]}"> {value[1]} </option> </select> <input type="text" name="{opts.field.name}" class="form-control" field-type="date" if="{opts.type==\'date\'}" placeholder="{opts.field.placeholder}"> <input type="text" name="{opts.field.name}" class="form-control" field-type="datetime" if="{opts.type==\'datetime\'}" placeholder="{opts.field.placeholder}">', '', '', function(opts) {
     var self = this
 
     this.on('mount', function(){
@@ -51,7 +51,7 @@ riot.tag2('input-field', '<input type="text" name="{opts.field.name}" class="for
             buttonClass: 'btn btn-default btn-flat',
             numberDisplayed: 2,
             selectedClass: '',
-            nonSelectedText: opts.field.placeholder,
+            nonSelectedText: opts.field.placeholder || '请选择',
             maxHeight: 200
             }, opts.field.opts || {})
         load('ui.bootstrap.multiselect', function(){

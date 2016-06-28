@@ -11,9 +11,12 @@ class FuncSelectListView(object):
 
         subject = StringField('标题')
         author = StringField('作者')
-        fields = [('subject', subject), ('author', author)]
-        layout = [('subject',), ('author', )]
+        uni = UnicodeField('Unicode')
+        select = SelectField('单选', multiple=True, choices=[('1', '选项一'), ('2', '选项二')])
+        fields = [('subject', subject), ('author', author), ('uni', uni), ('select', select)]
+        layout = [('subject',), ('author', 'uni', 'select')]
         query = QueryView(fields=fields, layout=layout, form_cls=QueryForm)
+        print query.get_json()
         return query
 
     def select_listview(self):

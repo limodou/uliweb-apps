@@ -1,0 +1,30 @@
+{{extend "ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'blockUI')}}
+{{end}}
+
+{{block content_main}}
+{{use "ui.blockUI"}}
+
+<button id="btnClick">点击</button>
+<button id="btnClickCancel">取消点击</button>
+
+<div id="test" style="height:50px; width:100%; border:1px solid red;">This is test content</div>
+
+<button id="btnDefault">缺省消息</button>
+
+<script>
+  $(function(){
+    $('#btnClick').click(function(e){
+      $('#test').block({message:"This is a test"});
+    });
+    $('#btnClickCancel').click(function(e){
+      $('#test').unblock();
+    });
+    $('#btnDefault').click(function(e){
+      block_message('test');
+    });
+  });
+</script>
+{{end}}
