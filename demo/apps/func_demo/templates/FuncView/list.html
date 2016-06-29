@@ -15,7 +15,8 @@
 <query-condition></query-condition>
 
 <div class="tools">
-  <a class="btn btn-flat btn-primary btn-sm" href="/func/add"><i class="fa fa-plus"></i> 新增</a>
+  <a class="btn btn-flat btn-primary btn-sm" href="/func/add" id="btnAdd"><i class="fa fa-plus"></i> 新增</a>
+  <a class="btn btn-flat btn-primary btn-sm" href="/func/add1" id="btnAddDialog"><i class="fa fa-plus"></i> 新增(对话框)</a>
 </div>
 <ag-grid></ag-grid>
 <div class="clearfix tools">
@@ -44,6 +45,13 @@
 
     var query = {{<< json_dumps(query_form)}}
     riot.mount('query-condition', query)
+
+    $(function(){
+      $('#btnAddDialog').click(function(e){
+        e.preventDefault();
+        dialog($(this).attr('href'));
+      });
+    });
 
 </script>
 {{end}}
