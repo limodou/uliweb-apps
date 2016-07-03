@@ -28,7 +28,7 @@ class FuncView(functions.MultiView):
             fcls.subject.placeholder = '标题'
             fcls.subject.required = True
 
-        return self._add('blog', ok_url=url_for(self.list), pre_save=pre_save,
+        return self._add('blog', json_result=True, pre_save=pre_save,
                          post_created_form=post_created_form,
                          layout_class='bs3t'
                          )

@@ -45,7 +45,7 @@ class FuncSelectListView(object):
         ]
 
         def _subject(value, obj):
-            return '<a href="#">{}</a>'.format(value)
+            return u'<a href="#">{}</a>'.format(value)
 
         fields_convert_map = {'subject':_subject}
 

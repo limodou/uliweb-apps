@@ -18,8 +18,7 @@
 {{end}}
 
 {{block content_main}}
-<script src="{{=url_for_static('tags/common-widgets.js')}}"></script>
-<script src="{{=url_for_static('query_condition.js')}}"></script>
+{{use "ui.query_condition"}}
 
 <query-condition></query-condition>
 

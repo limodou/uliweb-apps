@@ -10,7 +10,7 @@
 <!-- 引入 grid.js (包含ag-grid tag)-->
 {{link "modules/ag-grid/tags/grid.js"}}
 <!-- 引入查询条件 -->
-<script src="{{=url_for_static('query_condition.js')}}"></script>
+{{use "ui.query_condition"}}
 
 <query-condition></query-condition>
 
