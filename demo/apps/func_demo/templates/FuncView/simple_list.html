@@ -79,7 +79,12 @@
     //初始化弹出框
     $('#btnAddDialog').click(function(e){
       e.preventDefault();
-      dialog($(this).attr('href'));
+      var options = {
+        onSuccess: function(dialog, d) {
+          data.add(d.data)
+        }
+      }
+      dialog($(this).attr('href'), options);
     });
 
   })
