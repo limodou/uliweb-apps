@@ -1,0 +1,88 @@
+{{extend "func_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('FUNCMENU', 'generic/simple_list')}}
+{{end}}
+
+{{block content_main}}
+<!-- 引入 rtable.js (riot-table)-->
+{{use "ui.rtable"}}
+{{use "ui.dataset"}}
+<!-- 引入查询条件 -->
+{{use "ui.query_condition"}}
+
+<query-condition></query-condition>
+
+<div class="tools">
+  <a class="btn btn-flat btn-primary btn-sm" href="/func/add1" id="btnAddDialog"><i class="fa fa-plus"></i> 新增(对话框)</a>
+  <div class="pull-right">
+    <a class="btn btn-flat btn-info btn-sm" href="{{<< table.download_url()}}">下载</a>
+  </div>
+</div>
+
+<rtable id="myrtable" class="table">
+  <rcol name="#" width="20px"></rcol>
+  <rcol name="id" width="20px"></rcol>
+  <rcol name="subject"></rcol>
+  <rcol name="author" width="80px"></rcol>
+  <rcol name="created_time" width="160px"></rcol>
+  <rcol name="modified_time" width="160px"></rcol>
+  <rcol name="action" width="100px">
+    <a href="#" onclick=edit()>编辑</a>
+  </rcol>
+  <div></div>
+</rtable>
+
+<div class="clearfix tools">
+  <div id="pagination" class="pull-left"></div>
+</div>
+
+<script>
+
+  function edit(e) {
+    console.log(e)
+  }
+
+
+  $(function(){
+
+    //初始化数据，使用DataSet和rtable
+    var data = new DataSet()
+    riot.mount('rtable')
+    var table = document.getElementById('myrtable')
+    table.setData(data)
+
+    // 绑定事件
+    data.on('*', function(r, d){
+      $('#pagination').text('共 ' + data.length + ' 条记录')
+      riot.update()
+    })
+
+    // 装入数据
+    data.load('{{<< table.data_url}}', function(r){return r.rows})
+
+
+    //初始化查询条件
+    var query = {
+        fields:[
+          {name:'subject', type:'str', label:'主题：'},
+          {name:'created_time', type:'date', label:'创建日期：', placeholder:'请输入日期'}
+        ],
+        layout: [
+          ['subject', 'created_time'],
+        ],
+        data: {
+        }
+    }
+    riot.mount('query-condition', query)
+
+    //初始化弹出框
+    $('#btnAddDialog').click(function(e){
+      e.preventDefault();
+      dialog($(this).attr('href'));
+    });
+
+  })
+
+</script>
+{{end}}

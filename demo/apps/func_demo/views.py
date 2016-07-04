@@ -53,3 +53,7 @@ class FuncView(functions.MultiView):
     def list(self):
         query = self._get_query_view()
         return self._list('blog', queryview=query, queryform=query.get_json())
+
+    def simple_list(self):
+        query = self._get_query_view()
+        return self._list('blog', queryview=query, queryform=query.get_json(), pagination=False)
