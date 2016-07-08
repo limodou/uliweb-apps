@@ -33,6 +33,21 @@ class FuncView(functions.MultiView):
                          layout_class='bs3t'
                          )
 
+    def edit(self, id):
+        def pre_save(data, obj):
+            if request.user:
+                data['author'] = request.user.id
+
+        def post_created_form(fcls, model, obj):
+            fcls.subject.placeholder = '标题'
+            fcls.subject.required = True
+
+        return self._edit('blog', functions.get_object('blog', int(id)),
+                        json_result=True, pre_save=pre_save,
+                        post_created_form=post_created_form,
+                        layout_class='bs3h'
+                        )
+
     def _get_query_view(self):
         from uliweb_layout.form.query_view import QueryModelView
 
@@ -57,3 +72,6 @@ class FuncView(functions.MultiView):
     def simple_list(self):
         query = self._get_query_view()
         return self._list('blog', queryview=query, queryform=query.get_json(), pagination=False)
+
+    def remove(self, id):
+        return self._delete('blog', functions.get_object('blog', int(id)), json_result=True)

@@ -20,18 +20,7 @@
   </div>
 </div>
 
-<rtable id="myrtable" class="table">
-  <rcol name="#" width="20px"></rcol>
-  <rcol name="id" width="20px"></rcol>
-  <rcol name="subject"></rcol>
-  <rcol name="author" width="80px"></rcol>
-  <rcol name="created_time" width="160px"></rcol>
-  <rcol name="modified_time" width="160px"></rcol>
-  <rcol name="action" width="100px">
-    <a href="#" onclick=edit()>编辑</a>
-  </rcol>
-  <div></div>
-</rtable>
+<rtable id="myrtable"></rtable>
 
 <div class="clearfix tools">
   <div id="pagination" class="pull-left"></div>
@@ -39,24 +28,49 @@
 
 <script>
 
-  function edit(e) {
-    console.log(e)
-  }
-
-
   $(function(){
 
     //初始化数据，使用DataSet和rtable
     var data = new DataSet()
-    riot.mount('rtable')
+    var options = {
+      tableClass: 'table table-bordered',
+      onUpdate: function(data){
+        $('#pagination').text('共 ' + data.length + ' 条记录')
+      }
+    }
+    var cols = [
+      {name:'#', width:'20px'},
+      {name:'id', label:'ID', width:'20px'},
+      {name:'subject', label:'标题'},
+      {name:'author', label:'作者', width:'80px'},
+      {name:'created_time', label:'创建时间', width:'160px'},
+      {name:'modified_time', label:'修改时间', width:'160px'},
+      {name:'action', label:'操作', width:'100px', buttons: [
+          {
+            icon:'edit',
+            title:'编辑',
+            onclick:function (row) {
+              var options = {
+                onSuccess: function(dialog, d) {
+                  data.update(d.data)
+                }
+              }
+              dialog('/func/edit/'+row.id, options);
+            }
+          },
+          {
+            label:'删除',
+            //title 省略了
+            //href: '/func/simple_list/remove/',
+            onclick:function (row) {
+              data.remove(row, '/func/remove/'+row.id)
+            }
+          }
+        ]
+      }
+    ]
+    riot.mount('rtable', {cols:cols, options:options, data:data})
     var table = document.getElementById('myrtable')
-    table.setData(data)
-
-    // 绑定事件
-    data.on('*', function(r, d){
-      $('#pagination').text('共 ' + data.length + ' 条记录')
-      riot.update()
-    })
 
     // 装入数据
     data.load('{{<< table.data_url}}', function(r){return r.rows})
