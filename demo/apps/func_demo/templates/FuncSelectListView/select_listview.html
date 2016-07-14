@@ -32,32 +32,34 @@
 
 <script>
 
-    /*
     var query = {
         fields:[
-          {name:'subject', type:'string', label:'字符串'},
-          {name:'strtest', type:'string', label:'测试一个很长的标签'},
+          {name:'subject', type:'str', label:'字符串'},
+          {name:'strtest', type:'str', label:'测试一个很长的标签'},
           {name:'password', type:'password', label:'密码', placeholder:'请输入密码'},
           {name:'single', type:'select', label:'单选', choices:[['1', '选择一'], ['2', '选择二'], ['3', '选择三']],
             placeholder:'请选择'},
           {name:'multiple', type:'select', label:'多选', choices:[['1', '选择一'], ['2', '选择二'], ['3', '选择三']],
             placeholder:'请选择', multiple:true, opts:{allSelectedText:'所有选项已经选中'}},
+          {name:'select2', type:'select', label:'单选', url:'/func/select2_search',
+              placeholder:'请选择'},
           {name:'date', type:'date', label:'日期', placeholder:'请输入日期'},
           {name:'datetime', type:'datetime', label:'日期时间', placeholder:'请输入日期时间'}
         ],
         layout: [
           ['subject', 'strtest'],
           ['password', 'single', 'multiple'],
+          ['select2'],
           ['date', 'datetime']
         ],
-        data: {
+/*        data: {
           subject: 'test',
           date: '2016-6-3',
           multiple: ['2']
         }
+*/
     }
-    */
-    var query = {{<< json_dumps(query_form)}}
+    //var query = {{<< json_dumps(query_form)}}
     riot.mount('query-condition', query)
 </script>
 

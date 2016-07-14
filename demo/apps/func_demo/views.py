@@ -75,3 +75,17 @@ class FuncView(functions.MultiView):
 
     def remove(self, id):
         return self._delete('blog', functions.get_object('blog', int(id)), json_result=True)
+
+    def select2_search(self):
+        name = request.GET.get('term', '')
+        v_field = request.values.get('label', 'title')
+        if name:
+            result = [
+                {'id': 1, v_field: 'Text1'},
+                {'id': 2, v_field: 'Text2'},
+                {'id': 3, v_field: 'Text3'},
+                {'id': 4, v_field: 'Text4'},
+            ]
+        else:
+            result = []
+        return json(result)
