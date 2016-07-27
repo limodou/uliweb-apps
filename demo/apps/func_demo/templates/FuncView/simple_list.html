@@ -39,13 +39,12 @@
       }
     }
     var cols = [
-      {name:'#', width:'20px'},
-      {name:'id', label:'ID', width:'20px'},
-      {name:'subject', label:'标题'},
-      {name:'author', label:'作者', width:'80px'},
-      {name:'created_time', label:'创建时间', width:'160px'},
-      {name:'modified_time', label:'修改时间', width:'160px'},
-      {name:'action', label:'操作', width:'100px', buttons: [
+      {name:'id', title:'ID', width:40, align:'center'},
+      {name:'subject', title:'标题'},
+      {name:'author', title:'作者', width:80},
+      {name:'created_time', title:'创建时间', width:160},
+      {name:'modified_time', title:'修改时间', width:160},
+      {name:'action', title:'操作', width:100, buttons: [
           {
             icon:'edit',
             title:'编辑',
@@ -69,7 +68,8 @@
         ]
       }
     ]
-    riot.mount('rtable', {cols:cols, options:options, data:data})
+    riot.mount('rtable', {cols:cols, options:options, data:data,
+      indexCol:true, height:'auto', checkCol:true, multiSelect:true})
     var table = document.getElementById('myrtable')
 
     // 装入数据
