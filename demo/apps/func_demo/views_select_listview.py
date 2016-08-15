@@ -4,7 +4,7 @@ from uliweb import expose, functions
 @expose('/func')
 class FuncSelectListView(object):
     def create_query(self, url):
-        from uliweb.form import UnicodeField, SelectField, StringField
+        from uliweb.form import *
         from uliweb_layout.form.query_view import QueryView
 
         QueryForm = functions.get_form('QueryForm')
@@ -13,10 +13,10 @@ class FuncSelectListView(object):
         author = StringField('作者')
         uni = UnicodeField('Unicode')
         select = SelectField('单选', multiple=True, choices=[('1', '选项一'), ('2', '选项二')])
-        fields = [('subject', subject), ('author', author), ('uni', uni), ('select', select)]
-        layout = [('subject',), ('author', 'uni', 'select')]
+        date = DateField('日期', range=True)
+        fields = [('subject', subject), ('author', author), ('uni', uni), ('select', select), ('date', date)]
+        layout = [('subject',), ('author', 'uni', 'select'), ('date',)]
         query = QueryView(fields=fields, layout=layout, form_cls=QueryForm)
-        print query.get_json()
         return query
 
     def select_listview(self):
@@ -28,6 +28,7 @@ class FuncSelectListView(object):
 
         #create query
         query_view = self.create_query(url_for(self.select_listview))
+        print '===== get_json =====', query_view.form.get_json()
         c = query_view.run()
 
         print  query_view.get_json()

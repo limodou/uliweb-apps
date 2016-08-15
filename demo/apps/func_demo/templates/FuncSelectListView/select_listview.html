@@ -44,7 +44,7 @@
           {name:'select2', type:'select', label:'单选', url:'/func/select2_search',
               placeholder:'请选择'},
           {name:'date', type:'date', label:'日期', placeholder:'请输入日期'},
-          {name:'datetime', type:'datetime', label:'日期时间', placeholder:'请输入日期时间'}
+          {name:'datetime', type:'datetime', label:'日期时间', placeholder:'请输入日期时间', range:true}
         ],
         layout: [
           ['subject', 'strtest'],
@@ -59,8 +59,8 @@
         }
 */
     }
-    //var query = {{<< json_dumps(query_form)}}
-    riot.mount('query-condition', query)
+    var query1 = {{<< json_dumps(query_form)}}
+    riot.mount('query-condition', query1)
 </script>
 
 
