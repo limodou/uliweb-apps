@@ -96,6 +96,9 @@
       var options = {
         onSuccess: function(dialog, d) {
           data.add(d.data)
+        },
+        onBeforeSubmit: function(dialog, form) {
+          console.log(serializeObject(form))
         }
       }
       dialog($(this).attr('href'), options);

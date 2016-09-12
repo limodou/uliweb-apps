@@ -5,53 +5,57 @@
 {{end}}
 
 {{block content_main}}
-<!-- 引入 ui.ag-grid -->
-{{use "ui.ag-grid"}}
-<!-- 引入 grid.js (包含ag-grid tag)-->
-{{link "modules/ag-grid/tags/grid.js"}}
-<!-- 引入查询条件 -->
-{{use "ui.query_condition"}}
+{{use "ui.rgrid"}}
 
 <query-condition></query-condition>
 
-<div class="tools">
-  <a class="btn btn-flat btn-primary btn-sm" href="/func/add" id="btnAdd"><i class="fa fa-plus"></i> 新增</a>
-  <a class="btn btn-flat btn-primary btn-sm" href="/func/add1" id="btnAddDialog"><i class="fa fa-plus"></i> 新增(对话框)</a>
-</div>
-<ag-grid></ag-grid>
-<div class="clearfix tools">
-  <div class="pull-right">
-    <a class="btn btn-flat btn-info btn-sm" href="{{<< table.download_url()}}">下载</a>
-  </div>
-  <div id="pagination" class="pull-left"></div>
-</div>
+<rgrid id="grid"></rgrid>
 
 <script>
-    var gridOptions = {
-        columnDefs: {{<< json_dumps(table.table_info['fields_list'])}},
-        //rowData: rowData
+    var tools = [
+      [
+        {
+          label:'新增',
+          icon:'fa fa-plus',
+          class:'btn btn-sm btn-primary btn-flat',
+          url:'/func/add'
+        },
+        {
+          label:'新增(对话框)',
+          class:'btn btn-sm btn-primary btn-flat',
+          onClick: function() {
+            var options = {
+              onSuccess: function(dialog, d) {
+                grid.add(d.data)
+              }
+            }
+            dialog('/func/add1', options);
+          }
+        }
+      ]
+    ]
+    var url = {{$ table.data_url}}
+    var cols = {{$ table.table_info['fields_list']}}
+    var query = {{$ query_form}}
+    riot.mount('rgrid', {
+      tools:tools,
+      cols:cols,
+      url:url,
+      query:query,
+      indexCol:true,
+      height:'auto',
+      maxHeight:400,
+      remoteSort:true,
+      download:true
+      <!--onSort:function(sorts){-->
+        <!--var _url = get_url(url, {sort:sorts[0].name+'.'+sorts[0].direction})-->
+        <!--grid.instance.url = _url-->
+        <!--grid.load(_url, function(r){-->
+          <!--return r.rows-->
+        <!--})-->
+      <!--}-->
+    })
 
-        //以下几个是用于分页的配置项
-        total: {{=total}},
-        pageRows: 2,
-        //自动撑满
-        autoFit: true,
-        //pagination: '#pagination
-        url: "{{<< table.data_url}}"
-
-    };
-
-    riot.mount('ag-grid', {options:gridOptions})
-
-    var query = {{<< json_dumps(query_form)}}
-    riot.mount('query-condition', query)
-
-    $(function(){
-      $('#btnAddDialog').click(function(e){
-        e.preventDefault();
-        dialog($(this).attr('href'));
-      });
-    });
-
+    var grid = document.getElementById('grid')
 </script>
 {{end}}

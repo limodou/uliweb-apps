@@ -41,15 +41,16 @@
             placeholder:'请选择'},
           {name:'multiple', type:'select', label:'多选', choices:[['1', '选择一'], ['2', '选择二'], ['3', '选择三']],
             placeholder:'请选择', multiple:true, opts:{allSelectedText:'所有选项已经选中'}},
-          {name:'select2', type:'select', label:'单选', url:'/func/select2_search',
-              placeholder:'请选择'},
-          {name:'date', type:'date', label:'日期', placeholder:'请输入日期'},
-          {name:'datetime', type:'datetime', label:'日期时间', placeholder:'请输入日期时间', range:true}
+          {name:'select2', type:'select', label:'单选', 'data-url':'/func/select2_search',
+              placeholder:'请选择', multiple:true},
+          {name:'date', type:'date', label:'日期', placeholder:'请输入日期', width:100},
+          {name:'datetime', type:'datetime', label:'日期时间', placeholder:['开始日期时间', '结束日期时间'], range:true},
+          {name:'price', type:'int', label:'价格', range:true, width:40}
         ],
         layout: [
           ['subject', 'strtest'],
           ['password', 'single', 'multiple'],
-          ['select2'],
+          ['select2', 'price'],
           ['date', 'datetime']
         ],
 /*        data: {
@@ -60,7 +61,7 @@
 */
     }
     var query1 = {{<< json_dumps(query_form)}}
-    riot.mount('query-condition', query1)
+    riot.mount('query-condition', query)
 </script>
 
 

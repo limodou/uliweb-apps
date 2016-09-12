@@ -1,0 +1,124 @@
+{{use "jquery"}}
+{{use "jqutils"}}
+{{use "jqeasyui"}}
+{{use "jqblockui"}}
+{{from uliweb.core.js import json_dumps}}
+{{from uliweb.utils.common import get_uuid}}
+{{token = get_uuid()}}
+{{#param: table_id, query_form, table}}
+<table id="{{=table_id}}"></table>
+<script type="text/javascript">
+
+    var create_table = function(url, download, options){
+
+        var times = 0;
+        var type;
+
+        function check_download(){
+            var url;
+            if (type == 'sep')
+                url = '/check_sep_download'
+            else
+                url = '/check_download'
+            $.get(url, {token:'{{=token}}'}).success(function(data){
+                if(data.success){
+                  $.unblockUI({fadeOut:200});
+                  if (type == 'sep') {
+                      show_message(data.message, 'success')
+                  } else
+                      $.download(data.url);
+                }else{
+                    times++;
+                    if (times > {{=settings.ASYNC_DOWNLOAD.timeout}}){
+                        show_message('处理时间过长，请等待消息通知查看结果', 'error')
+                        $.unblockUI({fadeOut:200});
+                        return;
+                    }
+                    else{
+                        setTimeout(check_download, 1000);
+                    }
+                }
+            });
+        }
+
+        function create_button(label, post_url, _type) {
+            return {
+                text:label,
+                iconCls:'icon-save',
+                handler:function(){
+                    var total = pager.data("pagination").options.total;
+                    if(download_count != 0) {
+                        download_count = Math.min(download_count, {{=settings.ASYNC_DOWNLOAD.download_count}});
+                    }
+                    else {
+                        download_count = {{=settings.ASYNC_DOWNLOAD.download_count}};
+                    }
+                    var query_string = $.query_string.remove('data').set('download', '').toString();
+                    if(total < download_count) {
+                        {{if settings.ASYNC_DOWNLOAD.enable:}}
+                          $.post(post_url, {'url':url+query_string, filename:settings.filename, alt:encodeURIComponent(settings.filename_alt), token:'{{=token}}'}).success(function(data){
+                              if(data.success){
+                                  $.blockUI({ css: {
+                                           border: 'none',
+                                           padding: '15px',
+                                           backgroundColor: '#000',
+                                           '-webkit-border-radius': '5px',
+                                           '-moz-border-radius': '5px',
+                                           opacity: .5,
+                                           color: '#fff'
+                                          },
+                                          message:'正在处理请稍候, 成功后也会以消息通知...'
+                                          });
+                                  times = 0;
+                                  type = _type
+                                  check_download();
+                              }else{
+                                  show_message(data.message, 'error');
+                              }
+                          });
+                        {{else:}}
+                          $.download(url + query_string);
+                        {{pass}}
+                    }
+                    else {
+                        show_message('下载数据条数不能超过' + download_count + ',请重新选择', 'error');
+                    }
+                }
+            }
+        }
+
+        var query_string = $.query_string.set('data', '').toString();
+        options = options || {};
+        var download_count = options.download_count || 0;
+        var settings = {
+            pagination:true,
+            striped: false,
+            singleSelect: true,
+            rownumbers:true,
+            nowrap: false,
+            width:'auto',
+            height:450,
+            url:url + query_string,
+            frozenColumns:{{=json_dumps(table.get_columns(True))}},
+            columns:{{=json_dumps(table.get_columns(False))}},
+            idField:'id',
+            filename: 'download.xls',
+            filename_alt: 'download.xls'
+        }
+        if (options){
+            $.extend( settings, options );
+        }
+        $('#{{=table_id}}').datagrid(settings);
+
+        if (download){
+            var pager = $('#{{=table_id}}').datagrid('getPager');
+            var buttons = [];
+            buttons.push(create_button('下载数据', '/download'))
+            if (download == 'all')
+              buttons.push(create_button('下载到ITDM', '/sep_download', 'sep'))
+            pager.pagination({
+                buttons:buttons
+            });
+        }
+    }
+</script>

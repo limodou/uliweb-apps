@@ -1,0 +1,34 @@
+{{extend "layout3-1col.html"}}
+
+{{block content_header_title}}
+  <h1>资源查看</h1>
+{{end}}
+
+{{block content_header_breadcrumb}}
+  <ol class="breadcrumb">
+    <li><a href="/resource_man?deploy_type={{=object.deploy_type}}">资源配置</a></li>
+    <li>{{=object.title}}</li>
+  </ol>
+{{end}}
+
+{{block content_main}}
+  {{<<view}}
+
+  <div class="tools">
+    <button class="btn btn-flat btn-primary" onclick="Edit()">编辑</button>
+  </div>
+
+  <script>
+    function Edit() {
+      var options = {
+        onSuccess: function(dialog, d) {
+          window.location.reload()
+        }
+      }
+      dialog('/resource_man/edit/'+{{=object.id}}, options);
+    }
+
+    //对权限的tooltip
+    popup_info('#view_field_permissions a');
+  </script>
+{{end}}

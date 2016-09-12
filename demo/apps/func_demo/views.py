@@ -57,11 +57,12 @@ class FuncView(functions.MultiView):
             #{'name':'created_time', 'op':'=='},
             {'name':'type', 'label':'类型', 'type':'select', 'choices':[('1', '是'), ('0', '否')], 'placeholder':'--请选择--'},
             {'name':'type1', 'label':'类型1', 'type':'select', 'multiple':True, 'choices':[('1', '是'), ('0', '否')], 'placeholder':'--请选择--'},
-            {'name':'created_time', 'label':'日期', 'type':'date', 'range':True},
+            {'name':'type2', 'label':'类型2', 'type':'select', 'multiple':True, 'data-url':'/func/select2_search', 'placeholder':'--请选择--'},
+            {'name':'created_time', 'label':'日期', 'type':'date', 'range':True, 'width':100},
         ]
         layout = [
                 ['subject', 'created_time'],
-                ['type', 'type1']
+                ['type', 'type1', 'type2']
             ]
         query = QueryModelView('blog', fields=fields, layout=layout, form_cls=QueryForm)
         return query
