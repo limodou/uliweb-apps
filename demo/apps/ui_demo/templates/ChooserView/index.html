@@ -1,0 +1,19 @@
+{{extend "ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'chooser')}}
+{{end}}
+
+{{block content_main}}
+<div id="form">
+  {{<< form}}
+</div>
+<script>
+    $(function(){
+      var $el = $('#form form')
+      validate_submit($el)
+      form_widgets($el)
+      $('#field_name').chooser({widget:'tree', widget_options:{url:'/ui/chooser/tree'}})
+    });
+</script>
+{{end}}

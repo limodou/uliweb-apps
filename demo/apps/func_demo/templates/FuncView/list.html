@@ -1,7 +1,7 @@
 {{extend "func_demo_layout.html"}}
 
 {{block sidemenu}}
-{{<< sidemenu('FUNCMENU', 'generic', 'list')}}
+{{<< sidemenu('FUNCMENU', 'generic/list')}}
 {{end}}
 
 {{block content_main}}
@@ -36,6 +36,16 @@
     ]
     var url = {{$ table.data_url}}
     var cols = {{$ table.table_info['fields_list']}}
+
+    cols[1].render = function(row, col, value){
+        if (!value || !row['name1_value']) return value
+        if (Array.isArray(value)) {
+          return row['name1_value']['text'].join(',')
+        }
+        else
+          return row['name1_value']['text']
+    }
+    cols[1].editor = {name:'select2', "data-url":"/func/select2_search"}
     var query = {{$ query_form}}
     riot.mount('rgrid', {
       tools:tools,
@@ -46,7 +56,18 @@
       height:'auto',
       maxHeight:400,
       remoteSort:true,
-      download:true
+      download:true,
+      editable:true,
+      contextMenu: [
+          { type: 'item', title: 'Add Sites', icon: 'fa fa-modx', fn: function(row, col) {
+            console.log(row, col)
+          }},
+          { type: 'item', title: 'Reset Login', icon: 'fa fa-user', fn: function() {}},
+          { type: 'item', title: 'Help', icon: 'fa fa-pied-piper', fn: function() {}},
+          { type: 'separator' },
+          { type: 'item', title: 'Logout', icon: 'fa fa-power-off', fn: function() {}}
+        ]
+
       <!--onSort:function(sorts){-->
         <!--var _url = get_url(url, {sort:sorts[0].name+'.'+sorts[0].direction})-->
         <!--grid.instance.url = _url-->

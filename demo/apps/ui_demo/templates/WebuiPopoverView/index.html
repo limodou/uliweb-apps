@@ -1,0 +1,53 @@
+{{extend "ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'popover')}}
+{{end}}
+
+{{block content_main}}
+<button id="btnShowPopup1" class="btn btn-default">Show Popup</button>
+<button id="btnShowPopup2" class="btn btn-default">Show Popup Hover</button>
+<button id="btnShowPopup3" class="btn btn-default">Show Popup Dialog</button>
+<button id="btnShowPopup4" class="btn btn-default">Show Login Dialog</button>
+<button id="btnShowPopup5" class="btn btn-default">Use Popup_URL</button>
+<script>
+    load(['ui.popover'], function(){
+        $('#btnShowPopup1').webuiPopover({content:'Content'});
+        $('#btnShowPopup2').webuiPopover({'title':'Title', content:'Content', trigger:'hover', delay:50});
+        $('#btnShowPopup3').webuiPopover({content:function(data){
+                return data;
+            },
+            title: 'Dialog',
+            width:'400',
+            height:'auto',
+            padding:true,
+            closeable:true,
+            type:'async', url:'/library_demo/webui_popover_dialog', delay:50});
+        $('#btnShowPopup4').webuiPopover({content:function(data){
+                var begin, end;
+                begin = data.indexOf('<!-- form -->')
+                end = data.indexOf('<!-- end form -->')
+                if (begin > -1 && end > -1){
+                    return data.substring(begin, end);
+                }
+                return data;
+            },
+            async: {
+                success: function(that){
+                    that.getContentElement().on('success.form', function(e, data){
+                        that.hide();
+                    });
+                }
+            },
+            title: 'Login',
+            width:400,
+            cache:false,
+            height:'auto',
+            padding:true,
+            closeable:true,
+            type:'async', url:'/library_demo/bs3login_ajax', delay:50});
+
+            popup_url('#btnShowPopup5', '/library_demo/bs3login_ajax', 'Login');
+    });
+</script>
+{{end}}

@@ -16,7 +16,9 @@ class FuncView(functions.MultiView):
             fcls.subject.placeholder = '标题'
             fcls.subject.required = True
 
-        return self._add('blog', ok_url=url_for(self.list), pre_save=pre_save,
+        return self._add('blog',
+                         layout_class='bs3t',
+                         ok_url=url_for(self.list), pre_save=pre_save,
                          post_created_form=post_created_form)
 
     def add1(self):
@@ -51,19 +53,27 @@ class FuncView(functions.MultiView):
     def _get_query_view(self):
         from uliweb_layout.form.query_view import QueryModelView
 
+        def _render_type(model, name, value, values):
+            from sqlalchemy import true
+            print '--------'
+            return true()
+
         QueryForm = functions.get_form('QueryForm')
         fields = [
             {'name':'subject', 'like':'_%'},
             #{'name':'created_time', 'op':'=='},
-            {'name':'type', 'label':'类型', 'type':'select', 'choices':[('1', '是'), ('0', '否')], 'placeholder':'--请选择--'},
+            {'name':'type', 'label':'类型', 'type':'select', 'choices':[('1', '是'), ('0', '否')],
+                'placeholder':'--请选择--', 'condition':_render_type},
             {'name':'type1', 'label':'类型1', 'type':'select', 'multiple':True, 'choices':[('1', '是'), ('0', '否')], 'placeholder':'--请选择--'},
             {'name':'type2', 'label':'类型2', 'type':'select', 'multiple':True, 'data-url':'/func/select2_search', 'placeholder':'--请选择--'},
             {'name':'created_time', 'label':'日期', 'type':'date', 'range':True, 'width':100},
         ]
         layout = [
-                ['subject', 'created_time'],
-                ['type', 'type1', 'type2']
+                ['subject', 'type2'],
+                ['type', 'type1', 'created_time']
             ]
+
+        functions.set_echo(True)
         query = QueryModelView('blog', fields=fields, layout=layout, form_cls=QueryForm)
         return query
 
@@ -81,13 +91,11 @@ class FuncView(functions.MultiView):
     def select2_search(self):
         name = request.GET.get('term', '')
         v_field = request.values.get('label', 'title')
+        page = int(request.values.get('page') or 1)
+        limit = int(request.values.get('limit') or 10)
         if name:
-            result = [
-                {'id': 1, v_field: 'Text1'},
-                {'id': 2, v_field: 'Text2'},
-                {'id': 3, v_field: 'Text3'},
-                {'id': 4, v_field: 'Text4'},
-            ]
+            result = {'total':100,
+                      'rows':[{'id':x, v_field: 'Text'+str(x)} for x in range((page-1)*limit+1, page*limit+1)]}
         else:
             result = []
         return json(result)
