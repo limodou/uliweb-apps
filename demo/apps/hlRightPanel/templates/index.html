@@ -1,0 +1,366 @@
+{{extend "site/layout2.html"}}
+
+{{block mainmenu}}
+{{<< mainmenu('ui_demo')}}
+{{end}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU','hlrightpanel')}}
+{{end}}
+{{block content_main}}
+{{ use "ui.jquery" }}
+{{ use "ui.jqueryui"}}
+{{ use "ui.bootstrap3"}}
+{{ use "ui.fontawesome"}}
+{{ use "ui.ionicons" }}
+{{ use "adminlte" }}
+<link href="static/hlRightPanel.css" rel="stylesheet">
+<script src="static/hlRightPanel.js" type="text/javascript"></script>
+<style>
+    .customIcon1 {
+        background-position: -88px -175px;
+        width: 34px;
+        height: 35px;
+        margin-left: 1px;
+        position: relative;
+        z-index: 2;
+        background-color: #7a6e6e;
+        display: inline-block;
+        background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars.png);
+        _background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars-png8.png);
+        background-repeat: no-repeat;
+    }
+
+    .customIcon2 {
+        background-position: -50px -50px;
+        width: 34px;
+        height: 35px;
+        margin-left: 1px;
+        position: relative;
+        z-index: 2;
+        background-color: #7a6e6e;
+        display: inline-block;
+        background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars.png);
+        _background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars-png8.png);
+        background-repeat: no-repeat;
+    }
+
+    .customIcon3 {
+        background-position: -190px -150px;
+        width: 34px;
+        height: 35px;
+        margin-left: 1px;
+        position: relative;
+        z-index: 2;
+        background-color: #7a6e6e;
+        display: inline-block;
+        background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars.png);
+        _background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars-png8.png);
+        background-repeat: no-repeat;
+    }
+
+    .customIcon4 {
+        background-position: -50px -100px;
+        width: 34px;
+        height: 35px;
+        margin-left: 1px;
+        position: relative;
+        z-index: 2;
+        background-color: #7a6e6e;
+        display: inline-block;
+        background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars.png);
+        _background-image: url(https://static.360buyimg.com/devfe/toolbar/1.0.0/css/i/toolbars-png8.png);
+        background-repeat: no-repeat;
+    }
+
+
+</style>
+<div class="row">
+    <div class="col-sm-12">
+        <h1>HlRightPanel - JQuery 右边栏插件</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h2>使用:</h2>
+    </div>
+    <div class="col-sm-12">
+        <p class="lead">
+            引入hlRihgtPanel.js 和 hlRightPanel.css
+        </p>
+        <p class="lead">
+            页面加载完成后调用插件并传给插件必要的参数
+            <code>
+                $.hlRightPanel({...});
+            </code>
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h2>参数:</h2>
+    </div>
+    <div class="col-sm-12">
+        <p>调用插件时, 需要传入一个数组,数组元素为object:</p>
+        <p>
+        <p> name: "...", //唯一标识</p>
+        <p> label: "...", //标签显示的名称</p>
+        <p> labelIcon: "...", //标签显示的图标</p>
+        <p> type: "...", //标签类型, bar 或者 link</p>
+        <p> href: "...", //当type为link时的链接</p>
+        <p> target: "..." //当type为link时的打开链接方式</p>
+        <p> template: "...", //面板内容</p>
+        <p> ajax: ... //异步请求获取面板内容</p>
+        </p>
+    </div>
+    <div class="col-sm-12">
+        <dl class="dl-horizontal">
+            <dt>Bar - 标签页</dt>
+            <dd>
+                <p>type: 标签类型为bar时,点击将打开与之相应的面板</p>
+                <p>template: 面板内容,type为bar时才会加载template,可以是下列形式之一</p>
+                <pre>
+                    "&lth1&gtHello&lt/h1&gt"            - 一段HTML代码
+                    "#id"                       - 一个页面元素的id, 该元素将被加载到面板中
+                    "#script_id"                - 一个script模版的id
+                    function(){                 - 一个方法, return的内容将被作为面板内容
+                        ...
+                        return "一段html代码"
+                    }
+                </pre>
+                <p>ajax: [ "url" || {...} ]</p>
+                <pre>
+                    ajax可以是一个字符串,字符串作为链接,使用GET方式获取面板内容
+                    或者, 是一个对象:
+                    url                 - 请求链接
+                    method              - 请求方式, GET或POST,默认POST
+                    dataType            - 数据格式, 默认json
+                    data: {}            - 传输的数据
+                    success             - 请求成功的回调方法,
+                                          固定格式:{success:true或false, msg:回传消息, content:页面内容}
+                                          如果未定义该参数, 回调参数success为true的情况下, 使用content作为页面内容
+                                          如果定义该参数,回调参数则经过处理, 格式为:{data: 回调数据(格式同固定格式), panel: 对应面板, tab: 对应标签}
+
+                </pre>
+            </dd>
+            <dt>Link - 链接</dt>
+            <dd>
+                <p>type: - 标签类型为link时, 点击将跳转页面</p>
+                <p>href: 链接</p>
+                <p>target: 链接的打开方式</p>
+            </dd>
+        </dl>
+    </div>
+    <div class="col-sm-12">
+        <h3>示例:</h3>
+        <h4>1.该段代码在页面初始化时候,生成右侧工具条</h4>
+        <pre>
+            var data = [
+            {
+                name: "userInfo1",
+                label: "我的账户1",
+                labelIcon: "customIcon1",
+                type: "bar",
+                template: "#template1"
+            },
+            {
+                name: "userInfo2",
+                label: "我的账户2",
+                labelIcon: "customIcon1",
+                type: "bar",
+                template: "#template2"
+            },
+            {
+                name: "userInfo3",
+                label: "收藏夹",
+                labelIcon: "customIcon2",
+                type: "bar",
+                template: function () {
+                    return "&lth1&gt我是一个小模版2&lt/h1&gt&lth2&gt收藏夹&lt/h2&gt"
+                }
+            },
+            {
+                name: "userInfo4",
+                label: "历史记录",
+                labelIcon: "customIcon4",
+                type: "bar",
+                template: "&lth1&gt我是一个小模版3&lt/h1&gt&lth2&gt历史记录&lt/h2&gt"
+            },
+            {
+                name: "userInfo5",
+                label: "我的消息",
+                labelIcon: "customIcon3",
+                type: "link",
+                href: "http://www.baidu.com",
+                target: "_blank"
+            },
+            {
+                name: "userInfo6",
+                label: "ajax模版1",
+                labelIcon: "customIcon3",
+                type: "bar",
+                ajax: {
+                    url: "/uli_toolbar/ajaxPOST",//"/uli_toolbar/my_account"
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        var1: "var1",
+                        var2: "var2"
+                    },
+                    success: function (_r) {
+                        $(".uli-toolbar-panel-main", _r.panel).append($(_r.data.content));
+                    }
+                }
+            },
+            {
+                name: "userInfo7",
+                label: "ajax模版2",
+                labelIcon: "customIcon3",
+                type: "bar",
+                ajax: "/uli_toolbar/my_account"
+            }
+        ];
+
+        var hl = $.hlRightPanel(data);
+        </pre>
+        <h4>2.删除上面name=userInfo8</h4>
+        <div><button type="button" id="delToolbar">删除userInfo8</button></div>
+        <pre>
+            $("#delToolbar").on("click", function () {
+                var delDom = hl.del("userInfo8");
+            });
+        </pre>
+        <h4>3.随机添加一个</h4>
+        <div><button type="button" id="addToolbar">随机添加一个</button></div>
+        <pre>
+            $("#addToolbar").on("click", function () {
+                var r = Math.ceil(Math.random()*100000+0);
+                var d = {
+                    name: "userInfo" + r,
+                    label: r,
+                    labelIcon: "customIcon3",
+                    type: "bar",
+                    ajax: "/uli_toolbar/my_account"
+                };
+                hl.add(d);
+            });
+        </pre>
+        <h4>4.获得一个</h4>
+        <div><button type="button" id="getToolbar">获取userInfo1</button></div>
+        <pre>
+            $("#getToolbar").on("click", function(){
+                console.log(hl.get("userInfo1"));
+            });
+        </pre>
+    </div>
+</div>
+<div id="template1">
+    <h1>我是一个小模版1.1</h1>
+    <h2>我的账户1</h2>
+</div>
+<script type="text/html" id="template2">
+    <h1>我是一个小模版1.2</h1>
+    <h2>我的账户2</h2>
+</script>
+
+<script>
+    $(function () {
+        var data = [
+            {
+                name: "userInfo1",
+                label: "我的账户1",
+                labelIcon: "customIcon1",
+                type: "bar",
+                template: "#template1"
+            },
+            {
+                name: "userInfo2",
+                label: "我的账户2",
+                labelIcon: "customIcon1",
+                type: "bar",
+                template: "#template2"
+            },
+            {
+                name: "userInfo3",
+                label: "收藏夹",
+                labelIcon: "customIcon2",
+                type: "bar",
+                template: function () {
+                    return "<h1>我是一个小模版2</h1><h2>收藏夹</h2>"
+                }
+            },
+            {
+                name: "userInfo4",
+                label: "历史记录",
+                labelIcon: "customIcon4",
+                type: "bar",
+                template: "<h1>我是一个小模版3</h1><h2>历史记录</h2>"
+            },
+            {
+                name: "userInfo5",
+                label: "我的消息",
+                labelIcon: "customIcon3",
+                type: "link",
+                href: "http://www.baidu.com",
+                target: "_blank"
+            },
+            {
+                name: "userInfo6",
+                label: "ajax模版1",
+                labelIcon: "customIcon3",
+                type: "bar",
+                ajax: {
+                    url: "/uli_toolbar/ajaxPOST",//"/uli_toolbar/my_account"
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        var1: "var1",
+                        var2: "var2"
+                    },
+                    success: function (_r) {
+                        $(".uli-toolbar-panel-main", _r.panel).append($(_r.data.content));
+                    }
+                }
+            },
+            {
+                name: "userInfo7",
+                label: "ajax模版2",
+                labelIcon: "customIcon3",
+                type: "bar",
+                ajax: "/uli_toolbar/my_account"
+            }
+        ];
+
+        var hl = $.hlRightPanel(data);
+        hl.add({
+            name: "userInfo8",
+            label: "add方法",
+            labelIcon: "customIcon3",
+            type: "bar",
+            ajax: "/uli_toolbar/my_account"
+        });
+
+        $("#delToolbar").on("click", function () {
+            var delDom = hl.del("userInfo8");
+            console.log(delDom);
+        });
+        $("#addToolbar").on("click", function () {
+            var r = Math.ceil(Math.random()*100000+0);
+            var d = {
+                name: "userInfo" + r,
+                label: r,
+                labelIcon: "customIcon3",
+                type: "bar",
+                ajax: "/uli_toolbar/my_account"
+            };
+            hl.add(d);
+
+        });
+        $("#getToolbar").on("click", function(){
+           console.log(hl.get("userInfo1"));
+        });
+    });
+
+
+</script>
+{{end}}
