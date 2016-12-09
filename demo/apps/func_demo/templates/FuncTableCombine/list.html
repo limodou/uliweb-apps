@@ -1,0 +1,27 @@
+{{extend "func_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('FUNCMENU', 'generic', 'list')}}
+{{end}}
+
+{{block content_main}}
+{{use 'ui.rgrid'}}
+<rgrid id='test_table'></rgrid>
+
+<script>
+    var query = {{<< json_dumps(query_form)}};
+    var url = '{{<< table["data_url"]}}';
+    var cols = {{<< json_dumps(table['table_info']['fields_list'])}};
+
+    var tg = riot.mount('rgrid#test_table', {
+        cols: cols,
+        url: url,
+        indexCol: true,
+        checkCol: false,
+        query: query,
+        pagination: false,
+        theme: 'simple',
+        combine_cols: ['c1', 'c2']
+    })[0];
+</script>
+{{end}}

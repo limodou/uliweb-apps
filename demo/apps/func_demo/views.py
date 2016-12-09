@@ -55,12 +55,11 @@ class FuncView(functions.MultiView):
 
         def _render_type(model, name, value, values):
             from sqlalchemy import true
-            print '--------'
             return true()
 
         QueryForm = functions.get_form('QueryForm')
         fields = [
-            {'name':'subject', 'like':'_%'},
+            {'name':'subject', 'like':'%_%'},
             #{'name':'created_time', 'op':'=='},
             {'name':'type', 'label':'类型', 'type':'select', 'choices':[('1', '是'), ('0', '否')],
                 'placeholder':'--请选择--', 'condition':_render_type},
