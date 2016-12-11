@@ -3,27 +3,33 @@
 {{block body_class}}home{{end}}
 {{block skin}}{{end}}
 
-{{block content}}
-
-
+{{block content_wrapper}}
 <link rel="stylesheet" type="text/css" href="{{=url_for_static('site/site.css')}}"></link>
 <script src="{{=url_for_static('site/site.tag')}}" type="riot/tag"></script>
 
-<div class="container-fluid">
-    <div class="row" id="header-unit">
-        <h1>Uliweb</h1>
-        <p class="sub-title">Unlimited Python WEB Framework</p>
-        <p class="text-center">
-            <a href="{{=settings.SITE.download_url}}" class="btn btn-lg btn-ghost">{{=settings.SITE.download_title}}</a>
-        </p>
-        <p class="text-center github-status">
-            <iframe src="http://ghbtns.com/github-btn.html?user=limodou&repo=uliweb&type=watch&count=true"
+<div class="row" id="header-unit">
+    <h1>Uliweb</h1>
+    <p class="sub-title">Unlimited Python WEB Framework</p>
+    <p class="text-center">
+        <a href="{{=settings.SITE.download_url}}" class="btn btn-lg btn-ghost">{{=settings.SITE.download_title}}</a>
+    </p>
+    <p class="text-center github-status">
+        <iframe src="http://ghbtns.com/github-btn.html?user=limodou&repo=uliweb&type=watch&count=true"
 allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
-            <iframe src="http://ghbtns.com/github-btn.html?user=limodou&repo=uliweb&type=fork&count=true"
+        <iframe src="http://ghbtns.com/github-btn.html?user=limodou&repo=uliweb&type=fork&count=true"
 allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
-        </p>
-    </div>
+    </p>
 </div>
+
+<div class="content-wrapper">
+    <div class="container">
+        {{include "layout/include/inc_1column_content_wrapper.html"}}
+        </div>
+</div>
+
+{{end}}
+
+{{block content}}
 <div class="container" style="height:300px;padding-top:40px;">
   <cards></cards>
 </div>

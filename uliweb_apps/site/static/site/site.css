@@ -1,4 +1,4 @@
-#header-unit {font-family:Bebas-Neue, serif; margin-top:-15px;height:400px;}
+#header-unit {font-family:Bebas-Neue, serif; height:400px;}
 #header-unit h1 {padding-top:60px;font-size:600%;text-align:center;font-family:"Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;}
 #header-unit .sub-title {text-align:center;font-size:200%;}
 #header-unit .github-status {margin-top:25px;}
@@ -27,12 +27,11 @@
   top: 10px;
   margin-right:10px;
 }
-body.home .content-wrapper > .container{
-    width: 100%;
-    padding-left: 0px;
-    padding-right: 0px;
-}
 #header-unit {
+  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+
   /* 加载背景图 */
   background-image: url(/static/site/blue-bg-ground.jpg);
 
