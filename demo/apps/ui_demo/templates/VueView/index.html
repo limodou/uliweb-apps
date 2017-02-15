@@ -1,0 +1,23 @@
+{{extend "ui_demo_layout.html"}}
+
+{{block sidemenu}}
+{{<< sidemenu('UIMENU', 'vue')}}
+{{end}}
+
+{{block content_main}}
+{{use "ui.vue"}}
+
+<div id="app">
+  { message }
+</div>
+
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!'
+  },
+  delimiters: ['{', '}']
+})
+</script>
+{{end}}

@@ -75,7 +75,7 @@ def process_task(row):
 
     handler = row.get_handler(log=log)
     #check depend task
-    depend_task = row.check_depend_tasks()
+    depend_task = row.check_depend_tasks(log)
     if depend_task:
         #依赖任务或父任务为取消时,当前任务取消
         if depend_task.status == CANCEL or depend_task.current_status == CANCEL:
