@@ -30,12 +30,16 @@
 <footer-card>
   <div class="col-sm-{ opts.size }">
       <ul>
-        <li each={ i, item in opts.items } class="{ heading: i == 0 }">
+        <li each={ item, i in opts.items } class="{ heading: i == 0 }">
             <a href="{ item[0] }" if={ i>0 }>{ item[1] }</a>
             <span if={ i == 0 }>{ item[1] }</span>
         </li>
       </ul>
   </div>
+
+  this.on('mount', function(){
+    console.log('aaaaa', opts)
+  });
 </footer-card>
 
 <custom-menu>
