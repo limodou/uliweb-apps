@@ -9,13 +9,19 @@
 
 <div id="app">
   { message }
+  <ul>
+    <li v-for="{list in lists}">
+      { list.title }
+    </li>
+  </ul>
 </div>
 
 <script>
 var app = new Vue({
   el: '#app',
   data: {
-    message: 'Hello Vue!'
+    message: 'Hello Vue!',
+    lists: [{'title':'Title1'}, {'title':'Title2'}]
   },
   delimiters: ['{', '}']
 })

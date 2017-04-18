@@ -58,7 +58,7 @@
 
         function handleDownload(post_url, url, _type){
           return function(e) {
-            var query_string = $.query_string.remove('data').set('download', '').toString();
+            var query_string = get_url(url, {'-data':true, download:1});
             {{if settings.get_var('ASYNC_DOWNLOAD/enable', False):}}
                 $.post(post_url, {'url':url+query_string,
                   filename:opts.filename,
@@ -85,7 +85,7 @@
                     }
                 });
             {{else:}}
-                $.download(url + query_string);
+                $.download(query_string);
             {{pass}}
           }
         }
