@@ -39,18 +39,25 @@
         function check_download(){
             var url = '/check_download'
             $.get(url, {token:'{{=token}}'}).success(function(data){
-                if(data.message){
+                if(data.success === true){
                     $.unblockUI({fadeOut:200});
-                    $.download(data.url);
-                }else{
+                    if (type == 'sep') {
+                        show_message(data.message)
+                    } else
+                        $.download(data.url);
+                }
+                else if(data.success === false) {
+                    show_message(data.message, 'error')
+                    $.unblockUI({fadeOut:200});
+                }
+                else {
                     times++;
-                    if (times > {{=settings.get_var('ASYNC_DOWNLOAD/timeout', 60)}}){
+                    if (times > {{=settings.get_var('ASYNC_DOWNLOAD/timeout', 12)}}){
                         show_message('处理时间过长，如有需要请与管理员联系', 'error')
                         $.unblockUI({fadeOut:200});
-                        return;
                     }
                     else{
-                        setTimeout(check_download, 1000);
+                        setTimeout(check_download, 5000);
                     }
                 }
             });
