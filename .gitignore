@@ -9,3 +9,4 @@ _git
 demo/sessions
 demo/database.db
 demo/alembic
+demo/node_modules

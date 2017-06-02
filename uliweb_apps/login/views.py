@@ -1,3 +1,5 @@
+#coding=utf8
+
 from uliweb.core.SimpleFrame import functions, expose
 from uliweb.i18n import ugettext_lazy as _
 import urllib
@@ -43,12 +45,22 @@ def login():
 
 
 def register():
+    from uliweb import settings
     from uliweb.contrib.auth import create_user, login
+
+    if not settings.LOGIN.register:
+        error('不允许用户自行注册')
+
+    next = request.values.get('next')
+    if not next:
+        next = request.referrer
+        if not next or (next and next.endswith('/register')):
+            next = add_prefix('/')
 
     form = functions.get_form('auth.RegisterForm')()
 
     if request.method == 'GET':
-        form.next.data = request.GET.get('next', add_prefix('/'))
+        form.next.data = next
         return {'form':form, 'msg':''}
     if request.method == 'POST':
         flag = form.validate(request.params)
@@ -60,13 +72,16 @@ def register():
             if f:
                 #add auto login support 2012/03/23
                 login(d)
-                next = urllib.unquote(request.POST.get('next', add_prefix('/')))
+                next = urllib.unquote(next)
                 return redirect(next)
             else:
                 form.errors.update(d)
 
-        msg = form.errors.get('_', '') or _('Register failed!')
-        return {'form':form, 'msg':str(msg)}
+        if request.is_xhr:
+            return json({'success':False, 'errors':form.errors})
+        else:
+            msg = form.errors.get('_', '') or _('Register failed!')
+            return {'form':form, 'msg':str(msg)}
 
 def logout():
     from uliweb.contrib.auth import logout as out

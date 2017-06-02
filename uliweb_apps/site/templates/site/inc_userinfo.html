@@ -1,6 +1,6 @@
 <script src="{{=url_for_static('site/site.js')}}"></script>
 
-<custom-menu></custom-menu>
+<custom-menu enable_register="{ {{$ settings.LOGIN.register or False }} }"></custom-menu>
 <script>
   {{
     if hasattr(request, 'user') and request.user:
