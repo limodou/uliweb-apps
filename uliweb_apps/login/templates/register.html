@@ -13,7 +13,7 @@
     <div class="login-logo">
       <a href="{{<< settings.LAYOUT.logo_url}}">{{<< settings.LAYOUT.logo_lg}}</a>
     </div>
-    <form action="" method="post" id="login-form">
+    <form action="/register" method="post" id="login-form">
       <input type="hidden" name="next"></input>
       <div class="form-group has-feedback">
         <input id="field_username" name="username" class="form-control" required placeholder="{{=_('Username')}}">
