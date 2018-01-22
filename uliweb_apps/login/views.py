@@ -41,7 +41,7 @@ def login():
             return json({'success':False, 'errors':form.errors})
         else:
             msg = form.errors.get('_', '') or _('Login failed!')
-            return {'form':form, 'msg':str(msg)}
+            return {'form':form, 'msg':msg}
 
 
 def register():
@@ -81,7 +81,7 @@ def register():
             return json({'success':False, 'errors':form.errors})
         else:
             msg = form.errors.get('_', '') or _('Register failed!')
-            return {'form':form, 'msg':str(msg)}
+            return {'form':form, 'msg':msg}
 
 def logout():
     from uliweb.contrib.auth import logout as out
