@@ -13,7 +13,7 @@
     <div class="login-logo">
       <a href="{{<< settings.LAYOUT.logo_url}}">{{<< settings.LAYOUT.logo_lg}}</a>
     </div>
-    <form action="/login" method="post" id="login-form">
+    <form action="{{=url_for('uliweb_apps.login.views.login')}}" method="post" id="login-form">
       <input type="hidden" name="next" value="{{=next}}"></input>
       <div class="form-group has-feedback">
         <input id="field_username" name="username" class="form-control" required placeholder="{{=_('username')}}">
@@ -34,7 +34,7 @@
         </div>
         <div class="col-xs-6">
           {{if settings.LOGIN.register:}}
-            <a href="/register" class="btn btn-link">{{=_('Register New User')}}</a>
+            <a href="{{=url_for('uliweb_apps.login.views.register')}}" class="btn btn-link">{{=_('Register New User')}}</a>
           {{pass}}
         </div>
       </div>
