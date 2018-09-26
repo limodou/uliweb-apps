@@ -11,7 +11,7 @@
         'user': {
           'image_url':request.user.get_image_url(),
           'url':'#',
-          'name':unicode(request.user),
+          'name':str(request.user),
           'email':request.user.email,
         },
         'enable_register':settings.SITE.enable_register,

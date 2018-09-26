@@ -14,7 +14,7 @@
       <a href="{{<< settings.LAYOUT.logo_url}}">{{<< settings.LAYOUT.logo_lg}}</a>
     </div>
     <form action="/login" method="post" id="login-form">
-      <input type="hidden" name="next"></input>
+      <input type="hidden" name="next" value="{{=next}}"></input>
       <div class="form-group has-feedback">
         <input id="field_username" name="username" class="form-control" required placeholder="{{=_('username')}}">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
