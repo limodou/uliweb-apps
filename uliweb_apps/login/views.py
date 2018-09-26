@@ -85,7 +85,6 @@ def register():
             msg = form.errors.get('_', '') or _('Register failed!')
             return {'form': form, 'msg': str(msg)}
 
-
 def logout():
     from uliweb.contrib.auth import logout as out
     from uliweb import settings
