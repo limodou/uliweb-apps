@@ -34,7 +34,7 @@
           filename: 'download.xlsx',
           filename_alt: 'download.xlsx'
         }
-        var opts = $.extend(true, {}, _defaults, options)
+        var opts = $.extend({}, _defaults, options)
 
         function check_download(){
             var url = '/check_download'
