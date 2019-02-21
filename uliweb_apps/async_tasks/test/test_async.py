@@ -19,7 +19,7 @@ def test_1():
     >>> Reset()
     >>> Task = functions.get_model('async_tasks')
     >>> t = Task.get_task(task.task_id)
-    >>> print t.execution_info
+    >>> print(t.execution_info)
     Hello
     """
 
@@ -32,7 +32,7 @@ def test_error():
     >>> Reset()
     >>> Task = functions.get_model('async_tasks')
     >>> t = Task.get_task(task.task_id)
-    >>> print t.status
+    >>> print(t.status)
     E
     """
 
@@ -46,7 +46,7 @@ def test_job_1():
     >>> time.sleep(10)
     >>> Task = functions.get_model('async_tasks')
     >>> t = Task.get_task(job.task_id)
-    >>> print t.status
+    >>> print(t.status)
     2
     """
 
@@ -60,7 +60,7 @@ def test_job_error():
     >>> time.sleep(10)
     >>> Task = functions.get_model('async_tasks')
     >>> t = Task.get_task(job.task_id)
-    >>> print t.status
+    >>> print(t.status)
     E
     """
 
@@ -78,4 +78,4 @@ functions.call_async(job)
 time.sleep(10)
 Task = functions.get_model('async_tasks')
 t = Task.get_task(job.task_id)
-print t.status
+print(t.status)
