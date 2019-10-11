@@ -43,7 +43,7 @@ def login():
             return json({'success': False, '_': 'Login Failed', 'errors': form.errors})
         else:
             msg = form.errors.get('_', '') or _('Login failed!')
-            return {'form': form, 'msg': str(msg)}
+            return {'form': form, 'msg': str(msg), 'next': next}
 
 
 def register():
